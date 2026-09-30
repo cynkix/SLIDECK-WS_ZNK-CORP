@@ -19,7 +19,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         // Sandboxed iframe fallback
       }
     }
-    return 'dark'; // default theme
+    return 'light'; // default theme
   });
 
   const applyThemeClasses = (t: Theme) => {
