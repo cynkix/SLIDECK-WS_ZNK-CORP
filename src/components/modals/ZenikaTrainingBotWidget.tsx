@@ -108,21 +108,28 @@ export const ZenikaTrainingBotWidget: React.FC<ZenikaTrainingBotWidgetProps> = (
         )}
       </AnimatePresence>
 
-      {/* Floating Action Launcher Button */}
+      {/* Floating Action Launcher Button - Discret, élégant et ergonomique */}
       <motion.button
         type="button"
         onClick={handleToggle}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#E60039] hover:bg-[#CC0033] text-white shadow-2xl flex items-center justify-center cursor-pointer relative group focus:outline-none"
-        aria-label={isOpen ? "Fermer l'assistant" : "Ouvrir l'assistant Zenika"}
+        className={`w-12 h-12 sm:w-13 sm:h-13 rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:shadow-xl transition-all duration-200 relative group focus:outline-none ${
+          isOpen
+            ? 'bg-[#E60039] text-white shadow-[#E60039]/25'
+            : 'bg-white/95 dark:bg-[#111726]/95 backdrop-blur-md border border-slate-200/90 dark:border-white/15 text-slate-700 dark:text-slate-200 hover:text-[#E60039] dark:hover:text-white hover:border-[#E60039]/40'
+        }`}
+        title={lang === 'fr' ? 'Assistant Zenika (Conseil & Formation)' : 'Zenika Assistant (Advisory & Training)'}
+        aria-label={isOpen ? (lang === 'fr' ? "Fermer l'assistant" : "Close assistant") : (lang === 'fr' ? "Ouvrir l'assistant Zenika" : "Open Zenika assistant")}
       >
-        <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-[#07090F] animate-pulse" />
+        {!isOpen && (
+          <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-[#E60039] border-2 border-white dark:border-[#111726]" />
+        )}
         {isOpen ? (
-          <X size={24} className="transition-transform group-hover:rotate-90" />
+          <X size={20} className="transition-transform group-hover:rotate-90" />
         ) : (
           <div className="flex items-center justify-center">
-            <Bot size={28} className="animate-pulse-subtle" />
+            <Bot size={22} className="text-[#E60039] dark:text-[#FF385C] group-hover:scale-110 transition-transform" />
           </div>
         )}
       </motion.button>
@@ -131,11 +138,11 @@ export const ZenikaTrainingBotWidget: React.FC<ZenikaTrainingBotWidgetProps> = (
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.9, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-x-3 bottom-20 sm:bottom-24 sm:right-6 sm:left-auto sm:w-[420px] max-h-[82vh] h-[580px] bg-white dark:bg-[#0E1322] text-slate-900 dark:text-white rounded-3xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col z-50 text-left"
+            exit={{ opacity: 0, scale: 0.9, y: 15 }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-x-3 bottom-18 sm:bottom-22 sm:right-6 sm:left-auto sm:w-[390px] max-h-[80vh] h-[540px] bg-white dark:bg-[#0E1322] text-slate-900 dark:text-white rounded-2xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col z-50 text-left"
           >
             {/* Bot Header */}
             <div className="px-5 py-4 bg-gradient-to-r from-slate-50 via-white to-red-50/20 dark:from-[#0E1322] dark:via-[#13192B] dark:to-[#1C0E16] border-b border-slate-200 dark:border-white/10 flex items-center justify-between">

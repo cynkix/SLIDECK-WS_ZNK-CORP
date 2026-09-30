@@ -1,6 +1,7 @@
 export * from './AgenciesSection';
 export * from './CompanyLogosMarquee';
 export * from './ContactSection';
+export * from './CustomSolutionsValueSection';
 export * from './HeritageSection';
 export * from './OperatingModelsSection';
 export * from './PartnersEcosystemSection';

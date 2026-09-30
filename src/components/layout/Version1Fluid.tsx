@@ -12,6 +12,7 @@ import { CompanyLogosMarquee } from '../sections/CompanyLogosMarquee';
 import { Language, SolutionBlock, ClientReference, OperatingModel } from '../../types';
 
 // Code-splitting: Lazy load below-the-fold deep dive sections
+const CustomSolutionsValueSection = lazy(() => import('../sections/CustomSolutionsValueSection').then(m => ({ default: m.CustomSolutionsValueSection })));
 const OperatingModelsSection = lazy(() => import('../sections/OperatingModelsSection').then(m => ({ default: m.OperatingModelsSection })));
 const PortfolioShowcaseSection = lazy(() => import('../sections/PortfolioShowcaseSection').then(m => ({ default: m.PortfolioShowcaseSection })));
 const AgenciesSection = lazy(() => import('../sections/AgenciesSection').then(m => ({ default: m.AgenciesSection })));
@@ -308,6 +309,16 @@ export const Version1Fluid: React.FC<Version1FluidProps> = ({
       <div id="clients-marquee" className="relative z-10 w-full scroll-mt-20">
         <CompanyLogosMarquee lang={lang} />
       </div>
+
+      {/* ========================================================================= */}
+      {/* SOLUTIONS SUR MESURE & OFFRES DE VALEUR (ACCÉLÉRATEURS & VALEUR MÉTIER)   */}
+      {/* ========================================================================= */}
+      <Suspense fallback={null}>
+        <CustomSolutionsValueSection
+          lang={lang}
+          onOpenContact={() => onOpenContact()}
+        />
+      </Suspense>
 
       {/* ========================================================================= */}
       {/* DES MODÈLES OPÉRATOIRES INTÈGRENT VOS ÉQUIPES                             */}

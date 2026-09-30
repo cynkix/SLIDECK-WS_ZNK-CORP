@@ -110,7 +110,6 @@ export const StrategicAxesSection: React.FC<StrategicAxesSectionProps> = ({
   const [hoveredFriction, setHoveredFriction] = useState<string | null>(null);
   const [hoveredOutcome, setHoveredOutcome] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [mobileSubTab, setMobileSubTab] = useState<'flow' | 'frictions' | 'roi'>('flow');
   const [modalOffer, setModalOffer] = useState<{ offer: AxisOffer; axis: StrategicAxisId } | null>(null);
   const [hasUserInteracted, setHasUserInteracted] = useState<boolean>(false);
   const [showClickAnimation, setShowClickAnimation] = useState<boolean>(true);
@@ -195,12 +194,17 @@ export const StrategicAxesSection: React.FC<StrategicAxesSectionProps> = ({
   const rightColY = useTransform(smoothRunway, [0.04, 0.18], [12, 0]);
   const rightColScale = useTransform(smoothRunway, [0.04, 0.18], [0.98, 1]);
 
-  // Si l'utilisateur clique sur un pilier pour interagir, révéler immédiatement les colonnes latérales
-  const sideHeadersOpacity = hasUserInteracted ? 1 : rawSideHeadersOpacity;
-  const leftColX = hasUserInteracted ? 0 : rawLeftColX;
-  const leftColOpacity = hasUserInteracted ? 1 : rawLeftColOpacity;
-  const rightColX = hasUserInteracted ? 0 : rawRightColX;
-  const rightColOpacity = hasUserInteracted ? 1 : rawRightColOpacity;
+  // Si l'utilisateur clique sur un pilier pour interagir ou sur mobile, révéler immédiatement les colonnes latérales
+  const sideHeadersOpacity = hasUserInteracted || isMobile ? 1 : rawSideHeadersOpacity;
+  const leftColX = isMobile ? 0 : (hasUserInteracted ? 0 : rawLeftColX);
+  const leftColOpacity = hasUserInteracted || isMobile ? 1 : rawLeftColOpacity;
+  const leftColYVal = isMobile ? 0 : leftColY;
+  const leftColScaleVal = isMobile ? 1 : leftColScale;
+
+  const rightColX = isMobile ? 0 : (hasUserInteracted ? 0 : rawRightColX);
+  const rightColOpacity = hasUserInteracted || isMobile ? 1 : rawRightColOpacity;
+  const rightColYVal = isMobile ? 0 : rightColY;
+  const rightColScaleVal = isMobile ? 1 : rightColScale;
 
   const titleParallaxY = 0;
   const titleParallaxOpacity = 1;
@@ -887,17 +891,17 @@ export const StrategicAxesSection: React.FC<StrategicAxesSectionProps> = ({
       <div className="max-w-[1720px] w-full mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* ========================================================================= */}
-        {/* 3 PILIERS STRATÉGIQUES : RUNWAY PINNÉ CENTRÉ LE TEMPS DU SCROLL           */}
+        {/* 3 PILIERS STRATÉGIQUES : RUNWAY PINNÉ CENTRÉ LE TEMPS DU SCROLL (DESKTOP ONLY) */}
         {/* ========================================================================= */}
         <div
           ref={runwayRef}
-          className="relative w-full pt-4"
-          style={{ height: isMobile ? 'auto' : '280vh' }}
+          className="hidden lg:block relative w-full pt-4"
+          style={{ height: '280vh' }}
         >
           {/* ========================================================================= */}
-          {/* DESKTOP VIEW (lg+): RUNWAY PINNÉ CENTRÉ AU SCROLL (3 COLONNES INTERACTIVES) */}
+          {/* VUE DESKTOP (lg+) : 3 COLONNES INTERACTIVES (COMPLEXITÉS | 3 PILIERS | ROI) */}
           {/* ========================================================================= */}
-          <div className="hidden lg:flex sticky top-0 min-h-screen lg:h-screen w-full flex-col justify-center items-center z-30 py-4 sm:py-6 lg:py-8 xl:py-10 px-2 sm:px-4 bg-slate-50/95 dark:bg-[#07090E]/95 backdrop-blur-md transition-colors">
+          <div className="sticky top-0 min-h-screen lg:h-screen w-full flex flex-col justify-center items-center z-30 py-4 sm:py-6 lg:py-8 xl:py-10 px-2 sm:px-4 bg-slate-50/95 dark:bg-[#07090E]/95 backdrop-blur-md transition-colors">
             <div className="w-full max-w-[1660px] mx-auto flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6">
               
               {/* Titre unique et descriptif de la valeur ajoutée Zenika & 3 piliers */}
@@ -923,7 +927,7 @@ export const StrategicAxesSection: React.FC<StrategicAxesSectionProps> = ({
                 </p>
               </motion.div>
 
-              <div className="rounded-3xl lg:rounded-[32px] bg-white dark:bg-[#090C15] border border-slate-200 dark:border-white/10 p-6 sm:p-7 lg:p-8 xl:p-10 shadow-2xl transition-colors overflow-hidden">
+              <div className="rounded-2xl sm:rounded-3xl lg:rounded-[32px] bg-white dark:bg-[#090C15] border border-slate-200 dark:border-white/10 p-3.5 sm:p-7 lg:p-8 xl:p-10 shadow-2xl transition-colors overflow-hidden">
                 {/* --------------------------------------------------------------------- */}
                 {/* 3 COLONNES INTERACTIVES DU SLIDE : GAUCHE (COMPLEXITÉS) | CENTRE (3 PILIERS) | DROITE (ROI) */}
                 {/* --------------------------------------------------------------------- */}
@@ -933,8 +937,8 @@ export const StrategicAxesSection: React.FC<StrategicAxesSectionProps> = ({
                   {/* COLONNE 1 : COMPLEXITÉ CONSTATÉE (LEFT - 7 POINTS DE FRICTIONS)      */}
                   {/* =================================================================== */}
                   <motion.div 
-                    style={{ x: leftColX, y: leftColY, opacity: leftColOpacity, scale: leftColScale, transformOrigin: 'left center' }}
-                    className="lg:col-span-4 flex flex-col justify-between space-y-3"
+                    style={{ x: leftColX, y: leftColYVal, opacity: leftColOpacity, scale: leftColScaleVal, transformOrigin: 'left center' }}
+                    className="order-2 lg:order-1 lg:col-span-4 flex flex-col justify-between space-y-3"
                   >
                     <div>
                       {/* Header Colonne Gauche : Titre card "Complexité constatée" avec nouvelle icône design Zenika */}
@@ -1026,7 +1030,7 @@ export const StrategicAxesSection: React.FC<StrategicAxesSectionProps> = ({
                   {/* =================================================================== */}
                   <motion.div 
                     style={{ scale: centerColScale, y: centerColY, opacity: centerColOpacity, transformOrigin: 'center center' }}
-                    className="lg:col-span-4 flex flex-col justify-between space-y-3 relative"
+                    className="order-1 lg:order-2 lg:col-span-4 flex flex-col justify-between space-y-3 relative"
                   >
                     {/* Halo d'ambiance doux centré derrière les cartes */}
                     <div 
@@ -1125,8 +1129,8 @@ export const StrategicAxesSection: React.FC<StrategicAxesSectionProps> = ({
                   {/* COLONNE 3 : VALEUR MÉTIER & ROI DÉBLOQUÉ (RIGHT - 6 IMPACTS CHIFFRÉS) */}
                   {/* =================================================================== */}
                   <motion.div 
-                    style={{ x: rightColX, y: rightColY, opacity: rightColOpacity, scale: rightColScale, transformOrigin: 'right center' }}
-                    className="lg:col-span-4 flex flex-col justify-between space-y-3"
+                    style={{ x: rightColX, y: rightColYVal, opacity: rightColOpacity, scale: rightColScaleVal, transformOrigin: 'right center' }}
+                    className="order-3 lg:order-3 lg:col-span-4 flex flex-col justify-between space-y-3"
                   >
                     <div>
                       {/* Header Colonne Droite : Titre card "Valeur Métier & ROI" avec nouvelle icône design Zenika */}
@@ -1217,379 +1221,28 @@ export const StrategicAxesSection: React.FC<StrategicAxesSectionProps> = ({
         </div>
 
         {/* ========================================================================= */}
-        {/* MOBILE VIEW (< lg): USER-CENTRIC, ALLÉGÉ, ERGONOMIQUE ET TACTILE          */}
+        {/* CATALOGUE DES 3 PILIERS STRATÉGIQUES & 12 OFFRES ACTIVABLES (MOBILE ONLY)   */}
         {/* ========================================================================= */}
-        <div className="block lg:hidden w-full py-4 space-y-4">
-          {/* Header Mobile Allégé */}
-          <div className="text-center space-y-1 px-3 max-w-md mx-auto">
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-display tracking-tight leading-snug">
-              {lang === 'fr' ? (
-                <>
-                  La <span className="text-[#E60039] dark:text-[#FF385C]">« valeur ajoutée »</span> Zenika
-                </>
-              ) : (
-                <>
-                  Zenika's <span className="text-[#E60039] dark:text-[#FF385C]">"added value"</span>
-                </>
-              )}
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 font-medium leading-relaxed">
-              {lang === 'fr'
-                ? 'Structure et méthode, expertise, expérience pour maîtriser/dépasser cette complexité'
-                : 'Structure and method, expertise, and experience to master and transcend this complexity'}
-            </p>
-          </div>
-
-          {/* BARRE ERGONOMIQUE DES 3 PILIERS (Grandes touches tactiles au pouce) */}
-          <div className="grid grid-cols-3 gap-2 px-1">
-            {(['optimiser', 'innover', 'transformer'] as StrategicAxisId[]).map((axisKey, idx) => {
-              const isActive = activeAxis === axisKey;
-              const axisNum = idx + 1;
-              const theme = AXIS_COLOR_SYSTEM[axisKey];
-
-              return (
-                <button
-                  key={axisKey}
-                  type="button"
-                  onClick={() => {
-                    setActiveAxis(axisKey);
-                    setActiveStep(axisNum as 1 | 2 | 3);
-                  }}
-                  className={`relative py-3 px-1.5 rounded-2xl flex flex-col items-center justify-center transition-all duration-200 cursor-pointer min-h-[52px] ${
-                    isActive
-                      ? 'text-white shadow-lg scale-[1.02] ring-2 ring-white/30'
-                      : 'bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white/70 hover:bg-slate-50 dark:hover:bg-white/[0.08]'
-                  }`}
-                  style={
-                    isActive
-                      ? { background: theme.centerGradient }
-                      : undefined
-                  }
-                >
-                  <span className="text-xs font-black font-display uppercase tracking-tight">
-                    {axisKey}
-                  </span>
-                  {isActive && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-white mt-1" />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* SÉLECTEUR DE VUE MOBILE : [ Synthèse Pilier ] [ 7 Frictions ] [ 6 ROIs ] */}
-          <div className="flex items-center justify-center p-1 bg-slate-200/70 dark:bg-white/[0.06] rounded-xl text-xs font-medium max-w-sm mx-auto">
-            <button
-              type="button"
-              onClick={() => setMobileSubTab('flow')}
-              className={`flex-1 py-1.5 px-2 rounded-lg text-center font-bold transition-all ${
-                mobileSubTab === 'flow'
-                  ? 'bg-white dark:bg-[#121622] text-slate-900 dark:text-white shadow-sm'
-                  : 'text-slate-600 dark:text-white/60 hover:text-slate-900'
-              }`}
-            >
-              {lang === 'fr' ? 'Vue Pilier' : 'Pillar View'}
-            </button>
-            <button
-              type="button"
-              onClick={() => setMobileSubTab('frictions')}
-              className={`flex-1 py-1.5 px-2 rounded-lg text-center font-bold transition-all ${
-                mobileSubTab === 'frictions'
-                  ? 'bg-white dark:bg-[#121622] text-slate-900 dark:text-white shadow-sm'
-                  : 'text-slate-600 dark:text-white/60 hover:text-slate-900'
-              }`}
-            >
-              {lang === 'fr' ? '7 Frictions' : '7 Frictions'}
-            </button>
-            <button
-              type="button"
-              onClick={() => setMobileSubTab('roi')}
-              className={`flex-1 py-1.5 px-2 rounded-lg text-center font-bold transition-all ${
-                mobileSubTab === 'roi'
-                  ? 'bg-white dark:bg-[#121622] text-slate-900 dark:text-white shadow-sm'
-                  : 'text-slate-600 dark:text-white/60 hover:text-slate-900'
-              }`}
-            >
-              {lang === 'fr' ? '6 ROIs' : '6 ROIs'}
-            </button>
-          </div>
-
-          {/* CONTENU MOBILE VARIABLE SELON L'ONGLET */}
-          {mobileSubTab === 'flow' && (
-            <div className="space-y-3 px-1 animate-fadeIn">
-              {/* 1. HERO DU PILIER ACTIF */}
-              <div
-                className="rounded-2xl p-4 sm:p-5 text-center text-white shadow-xl relative overflow-hidden"
-                style={{ background: AXIS_COLOR_SYSTEM[activeAxis].centerGradient }}
-              >
-                <div className="space-y-1">
-                  <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-white/20 text-white font-bold inline-block">
-                    {lang === 'fr' ? `Pilier ${activeStep}/3` : `Pillar ${activeStep}/3`}
-                  </span>
-                  <h4 className="text-2xl font-black font-display uppercase tracking-tight text-white">
-                    {activeAxis}
-                  </h4>
-                  <p className="text-xs font-medium text-white/95 italic max-w-xs mx-auto">
-                    {lang === 'fr' ? axesConfig[activeAxis].taglineFr : axesConfig[activeAxis].taglineEn}
-                  </p>
-                </div>
-
-                <div className="my-3 text-[11px] font-mono text-white/90 leading-tight bg-black/15 p-2 rounded-xl border border-white/10">
-                  {activeAxis === 'optimiser' && (
-                    lang === 'fr' ? '4 Offres · -40% Dette · x2.5 Vélocité · FinOps maîtrisé' : '4 Offers · -40% Debt · 2.5x Velocity · Controlled FinOps'
-                  )}
-                  {activeAxis === 'innover' && (
-                    lang === 'fr' ? '4 Offres · x3 Time-to-Market · IA Native · Frugalité' : '4 Offers · 3x Time-to-Market · Native AI · Frugality'
-                  )}
-                  {activeAxis === 'transformer' && (
-                    lang === 'fr' ? '4 Offres · 100% Alignement · Acculturation · Delivery Continu' : '4 Offers · 100% Alignment · Cultural Shift · Continuous Delivery'
-                  )}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    document.getElementById('offers-showcase')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="w-full py-2.5 px-4 rounded-xl bg-white text-slate-900 font-bold text-xs shadow-md hover:bg-slate-100 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <span>
-                    {lang === 'fr' ? `Explorer les 4 offres ${activeAxis}` : `Explore the 4 ${activeAxis} offers`}
-                  </span>
-                  <ArrowRight size={14} />
-                </button>
-              </div>
-
-              {/* 2. FRICTIONS TRAITÉES PAR CE PILIER */}
-              <div className="rounded-2xl bg-white dark:bg-[#090C15] border border-slate-200 dark:border-white/10 p-3.5 shadow-sm space-y-2.5">
-                <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-white/5">
-                  <ZenikaComplexityIcon size={24} className="shrink-0" />
-                  <h4 className="text-xs font-bold font-display uppercase tracking-wider text-slate-900 dark:text-white">
-                    {lang === 'fr' ? 'Frictions traitées par cet axe' : 'Frictions resolved by this axis'}
-                  </h4>
-                </div>
-
-                <div className="space-y-2">
-                  {complexityItems
-                    .filter((c) => c.resolvedBy === activeAxis)
-                    .map((item) => (
-                      <div
-                        key={item.id}
-                        className="p-2.5 rounded-xl bg-slate-50 dark:bg-[#121622] border-l-2 border-l-[#EE2238] border-slate-200/60 dark:border-white/5 space-y-0.5 text-left"
-                      >
-                        <p className="text-xs font-bold text-slate-900 dark:text-white">
-                          {lang === 'fr' ? item.labelFr : item.labelEn}
-                        </p>
-                        <p className="text-[11px] text-slate-600 dark:text-white/60 font-light leading-relaxed">
-                          {lang === 'fr' ? item.detailFr : item.detailEn}
-                        </p>
-                      </div>
-                    ))}
-                </div>
-              </div>
-
-              {/* 3. IMPACT & ROI DÉBLOQUÉ PAR CE PILIER */}
-              <div className="rounded-2xl bg-white dark:bg-[#090C15] border border-slate-200 dark:border-white/10 p-3.5 shadow-sm space-y-2.5">
-                <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-white/5">
-                  <ZenikaRoiIcon size={24} className="shrink-0" />
-                  <h4 className="text-xs font-bold font-display uppercase tracking-wider text-slate-900 dark:text-white">
-                    {lang === 'fr' ? 'Valeur Métier & ROI débloqués' : 'Business Value & ROI unlocked'}
-                  </h4>
-                </div>
-
-                <div className="space-y-2">
-                  {roiOutcomes
-                    .filter((r) => r.linkedAxis === activeAxis)
-                    .map((item) => (
-                      <div
-                        key={item.id}
-                        className="p-2.5 rounded-xl bg-slate-50 dark:bg-[#121622] border-l-2 border-l-emerald-500 border-slate-200/60 dark:border-white/5 flex items-start justify-between gap-2 text-left"
-                      >
-                        <div className="space-y-0.5 min-w-0 flex-1">
-                          <p className="text-xs font-bold text-slate-900 dark:text-white">
-                            {lang === 'fr' ? item.labelFr : item.labelEn}
-                          </p>
-                          <p className="text-[11px] text-slate-600 dark:text-white/60 font-light leading-relaxed">
-                            {lang === 'fr' ? item.subFr : item.subEn}
-                          </p>
-                        </div>
-                        <span className="text-xs font-mono font-black px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 shrink-0">
-                          {item.metric}
-                        </span>
-                      </div>
-                    ))}
-                </div>
-              </div>
-
-              {/* NAVIGATION TACTILE INFÉRIEURE : PRÉCÉDENT / SUIVANT */}
-              <div className="flex items-center justify-between pt-1">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (activeAxis === 'optimiser') {
-                      setActiveAxis('transformer');
-                      setActiveStep(3);
-                    } else if (activeAxis === 'innover') {
-                      setActiveAxis('optimiser');
-                      setActiveStep(1);
-                    } else {
-                      setActiveAxis('innover');
-                      setActiveStep(2);
-                    }
-                  }}
-                  className="px-3 py-2 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-white text-xs font-bold flex items-center gap-1 cursor-pointer"
-                >
-                  <ChevronLeft size={14} />
-                  <span>{lang === 'fr' ? 'Précédent' : 'Previous'}</span>
-                </button>
-
-                <div className="flex items-center gap-1.5">
-                  {[1, 2, 3].map((stepNum) => (
-                    <button
-                      key={stepNum}
-                      type="button"
-                      onClick={() => {
-                        const a = stepNum === 1 ? 'optimiser' : stepNum === 2 ? 'innover' : 'transformer';
-                        setActiveAxis(a);
-                        setActiveStep(stepNum as 1 | 2 | 3);
-                      }}
-                      className={`w-2.5 h-2.5 rounded-full transition-all ${
-                        activeStep === stepNum
-                          ? 'w-6 bg-[#E60039]'
-                          : 'bg-slate-300 dark:bg-white/20'
-                      }`}
-                      aria-label={`Étape ${stepNum}`}
-                    />
-                  ))}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (activeAxis === 'optimiser') {
-                      setActiveAxis('innover');
-                      setActiveStep(2);
-                    } else if (activeAxis === 'innover') {
-                      setActiveAxis('transformer');
-                      setActiveStep(3);
-                    } else {
-                      setActiveAxis('optimiser');
-                      setActiveStep(1);
-                    }
-                  }}
-                  className="px-3 py-2 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-white text-xs font-bold flex items-center gap-1 cursor-pointer"
-                >
-                  <span>{lang === 'fr' ? 'Suivant' : 'Next'}</span>
-                  <ChevronRight size={14} />
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 2 : TOUTES LES 7 FRICTIONS */}
-          {mobileSubTab === 'frictions' && (
-            <div className="space-y-2 px-1 animate-fadeIn">
-              <p className="text-[11px] text-slate-500 dark:text-white/50 text-center italic mb-1">
-                {lang === 'fr'
-                  ? 'Touchez une friction pour afficher le pilier qui la résout :'
-                  : 'Tap a friction to reveal the resolving pillar:'}
-              </p>
-              {complexityItems.map((item) => {
-                const itemTheme = AXIS_COLOR_SYSTEM[item.resolvedBy];
-                return (
-                  <button
-                    type="button"
-                    key={item.id}
-                    onClick={() => {
-                      setActiveAxis(item.resolvedBy);
-                      setActiveStep(item.resolvedBy === 'optimiser' ? 1 : item.resolvedBy === 'innover' ? 2 : 3);
-                      setMobileSubTab('flow');
-                    }}
-                    className="w-full p-3 rounded-2xl bg-white dark:bg-[#090C15] border border-slate-200 dark:border-white/10 shadow-sm cursor-pointer active:scale-[0.99] transition-transform text-left space-y-1"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-bold text-slate-900 dark:text-white">
-                        {lang === 'fr' ? item.labelFr : item.labelEn}
-                      </span>
-                      <span
-                        className="text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full text-white shrink-0"
-                        style={{ backgroundColor: itemTheme.leftSolidColor }}
-                      >
-                        → {item.resolvedBy.toUpperCase()}
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-slate-600 dark:text-white/60 font-light leading-relaxed">
-                      {lang === 'fr' ? item.detailFr : item.detailEn}
-                    </p>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
-          {/* TAB 3 : TOUS LES 6 RÉSULTATS ROI */}
-          {mobileSubTab === 'roi' && (
-            <div className="space-y-2 px-1 animate-fadeIn">
-              <p className="text-[11px] text-slate-500 dark:text-white/50 text-center italic mb-1">
-                {lang === 'fr'
-                  ? 'Touchez un résultat ROI pour voir le levier d’ingénierie :'
-                  : 'Tap an ROI metric to see the engineering lever:'}
-              </p>
-              {roiOutcomes.map((item) => {
-                const itemTheme = AXIS_COLOR_SYSTEM[item.linkedAxis];
-                return (
-                  <button
-                    type="button"
-                    key={item.id}
-                    onClick={() => {
-                      setActiveAxis(item.linkedAxis);
-                      setActiveStep(item.linkedAxis === 'optimiser' ? 1 : item.linkedAxis === 'innover' ? 2 : 3);
-                      setMobileSubTab('flow');
-                    }}
-                    className="w-full p-3 rounded-2xl bg-white dark:bg-[#090C15] border border-slate-200 dark:border-white/10 shadow-sm cursor-pointer active:scale-[0.99] transition-transform text-left flex items-start justify-between gap-3"
-                  >
-                    <div className="space-y-1 min-w-0 flex-1">
-                      <div className="flex items-center gap-1.5">
-                        <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />
-                        <span className="text-xs font-bold text-slate-900 dark:text-white">
-                          {lang === 'fr' ? item.labelFr : item.labelEn}
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-slate-600 dark:text-white/60 font-light leading-relaxed">
-                        {lang === 'fr' ? item.subFr : item.subEn}
-                      </p>
-                      <span
-                        className="inline-block text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full text-white mt-1"
-                        style={{ backgroundColor: itemTheme.rightSolidColor }}
-                      >
-                        → {item.linkedAxis.toUpperCase()}
-                      </span>
-                    </div>
-                    <span className="text-sm font-mono font-black px-2.5 py-1 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 shrink-0">
-                      {item.metric}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        {/* ========================================================================= */}
-        {/* CATALOGUE DES 3 PILIERS STRATÉGIQUES & 12 OFFRES ACTIVABLES (MOBILE ONLY)  */}
-        {/* ========================================================================= */}
-        <div className="block lg:hidden text-center pt-4 sm:pt-6 pb-0 max-w-4xl mx-auto space-y-1.5 px-4">
+        <div className="block lg:hidden text-center pt-4 sm:pt-8 pb-3 max-w-4xl mx-auto space-y-2 px-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E60039]/10 text-[#E60039] text-xs font-bold font-mono uppercase tracking-wider mb-1">
             <Sparkles size={13} />
-            <span>{lang === 'fr' ? 'Catalogue d’interventions' : 'Intervention Catalog'}</span>
+            <span>{lang === 'fr' ? 'Les 3 Piliers Stratégiques' : 'The 3 Strategic Pillars'}</span>
           </div>
-          <h4 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white font-display tracking-tight">
-            {lang === 'fr' ? 'Nos 3 piliers stratégiques en action :' : 'Our 3 strategic pillars in action:'}
-          </h4>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white font-display tracking-tight leading-tight">
+            {lang === 'fr' ? (
+              <>
+                La <span className="text-[#E60039] dark:text-[#FF385C]">« valeur ajoutée »</span> Zenika
+              </>
+            ) : (
+              <>
+                Zenika's <span className="text-[#E60039] dark:text-[#FF385C]">"added value"</span>
+              </>
+            )}
+          </h2>
           <p className="text-sm sm:text-base md:text-lg text-slate-700 dark:text-white/90 font-normal leading-relaxed">
             {lang === 'fr'
-              ? 'Explorez les 12 offres activables pour relever vos défis technologiques et organisationnels'
-              : 'Explore the 12 actionable offerings to tackle your tech and organizational challenges'}
+              ? 'Structure et méthode, expertise, expérience : découvrez nos 3 piliers et les 12 offres activables'
+              : 'Structure and method, expertise, and experience: discover our 3 pillars and 12 actionable offerings'}
           </p>
         </div>
 

@@ -123,6 +123,15 @@ export function AppContent() {
           />
         </Suspense>
       )}
+
+      {/* Floating Zenika Assistant Bot Widget (Discretely positioned) */}
+      <Suspense fallback={null}>
+        <ZenikaTrainingBotWidget
+          lang={lang}
+          isOpenExternal={isBotWidgetOpen}
+          onCloseExternal={handleCloseBot}
+        />
+      </Suspense>
     </div>
   );
 }

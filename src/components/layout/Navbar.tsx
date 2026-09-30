@@ -255,12 +255,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                 href={lang === 'fr' ? 'https://training.zenika.com/fr' : 'https://training.zenika.com'}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden 2xl:inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-700 dark:text-[#8E9BAE] hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-all group whitespace-nowrap shrink-0"
+                className="hidden xl:inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold text-slate-700 dark:text-[#8E9BAE] hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-all group whitespace-nowrap shrink-0"
                 title={lang === 'fr' ? 'Zenika Training · Catalogue formations (ouvre dans un nouvel onglet)' : 'Zenika Training · Course catalog (opens in new tab)'}
               >
-                <GraduationCap size={14} className="text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform" />
-                <span>{lang === 'fr' ? 'Formations' : 'Training'}</span>
-                <ExternalLink size={10} className="text-slate-400 group-hover:text-indigo-600 dark:text-white/40 dark:group-hover:text-indigo-400 transition-colors" />
+                <GraduationCap size={13} className="text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform" />
+                <span>{lang === 'fr' ? 'Training' : 'Training'}</span>
+                <ExternalLink size={9} className="text-slate-400 group-hover:text-indigo-600 dark:text-white/40 dark:group-hover:text-indigo-400 transition-colors" />
               </a>
 
               {/* Join Us / Carrières Button (Jobs Zenika - New Tab) */}
