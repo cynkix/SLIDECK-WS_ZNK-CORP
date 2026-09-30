@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr" class="dark scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zenika — Partenaire Technologique de Proximité</title>
+    <meta name="description" content="À l'ère de l'IA et du Cloud, Zenika est le partenaire technologique de proximité qui augmente l’impact métier de votre SI. Conseil, Réalisation et Formation." />
+    <meta property="og:title" content="Zenika — Partenaire Technologique de Proximité" />
+    <meta property="og:description" content="À l'ère de l'IA et du Cloud, Zenika est le partenaire technologique de proximité qui augmente l’impact métier de votre SI." />
+    <link rel="icon" type="image/svg+xml" href="./zenika-monogram.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('zenika_theme');
+          if (saved === 'light') {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.style.colorScheme = 'light';
+          } else {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.style.colorScheme = 'dark';
+          }
+        } catch(e) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-[#0b0f19] dark:text-white transition-colors duration-200 selection:bg-[#E60039] selection:text-white antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
