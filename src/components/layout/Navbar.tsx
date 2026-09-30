@@ -183,12 +183,12 @@ export const Navbar: React.FC<NavbarProps> = ({
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${
           headerVisible
-            ? 'translate-y-0 opacity-100 bg-white/90 dark:bg-[#080B11]/90 backdrop-blur-xl border-b border-slate-200/80 dark:border-[#222B3D]/80 shadow-sm dark:shadow-2xl py-3.5 sm:py-4 pointer-events-auto'
-            : '-translate-y-full opacity-0 pointer-events-none py-3'
+            ? 'translate-y-0 opacity-100 bg-white/90 dark:bg-[#080B11]/90 backdrop-blur-xl border-b border-slate-200/80 dark:border-[#222B3D]/80 shadow-2xs dark:shadow-2xl py-2 sm:py-2.5 pointer-events-auto'
+            : '-translate-y-full opacity-0 pointer-events-none py-2'
         }`}
       >
-        <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
+        <div className="w-full max-w-[1720px] mx-auto px-3 sm:px-5 lg:px-6">
+          <div className="flex items-center justify-between gap-3">
             {/* Brand Logo */}
             <a
               href="/"
@@ -197,22 +197,22 @@ export const Navbar: React.FC<NavbarProps> = ({
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="flex items-center group cursor-pointer focus:outline-none"
+              className="flex items-center group cursor-pointer focus:outline-none shrink-0"
             >
-              <ZenikaLogo size="md" />
+              <ZenikaLogo height={28} />
             </a>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden xl:flex items-center gap-1 sm:gap-1.5 transition-colors">
+            <nav className="hidden xl:flex items-center gap-0.5 2xl:gap-1 transition-colors">
               {navItems.map((item) => {
                 const isActive = activeSection === item.id;
                 return (
                   <button
                     key={item.id}
                     onClick={() => scrollTo(item.id, item.altIds)}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 cursor-pointer ${
+                    className={`px-2 py-1 2xl:px-2.5 2xl:py-1.5 text-xs font-medium rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap ${
                       isActive
-                        ? 'bg-[#E60039] text-white shadow-md shadow-[#E60039]/20 font-semibold'
+                        ? 'bg-[#E60039] text-white shadow-xs shadow-[#E60039]/20 font-semibold'
                         : 'text-slate-600 dark:text-[#8E9BAE] hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
                     }`}
                   >
@@ -223,31 +223,31 @@ export const Navbar: React.FC<NavbarProps> = ({
             </nav>
 
             {/* Right CTAs & Language / Theme Switchers */}
-            <div className="hidden xl:flex items-center gap-2.5">
+            <div className="hidden xl:flex items-center gap-1.5 2xl:gap-2 shrink-0">
               {/* Theme Switcher Toggle */}
               <button
                 onClick={toggleTheme}
-                className="flex items-center justify-center w-9 h-9 text-xs rounded-xl text-slate-600 dark:text-[#8E9BAE] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.08] border border-slate-200/80 dark:border-white/10 transition-all cursor-pointer"
+                className="flex items-center justify-center w-8 h-8 text-xs rounded-lg text-slate-600 dark:text-[#8E9BAE] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.08] border border-slate-200/80 dark:border-white/10 transition-all cursor-pointer shrink-0"
                 title={theme === 'dark' ? (lang === 'fr' ? 'Passer en mode clair' : 'Switch to light mode') : (lang === 'fr' ? 'Passer en mode sombre' : 'Switch to dark mode')}
                 aria-label="Toggle Theme"
               >
                 {theme === 'dark' ? (
-                  <Sun size={15} className="text-amber-400 hover:rotate-45 transition-transform" />
+                  <Sun size={14} className="text-amber-400 hover:rotate-45 transition-transform" />
                 ) : (
-                  <Moon size={15} className="text-indigo-600 hover:-rotate-12 transition-transform" />
+                  <Moon size={14} className="text-indigo-600 hover:-rotate-12 transition-transform" />
                 )}
               </button>
 
               {/* Language Switch */}
               <button
                 onClick={() => onLanguageChange(lang === 'fr' ? 'en' : 'fr')}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-mono text-slate-600 dark:text-[#8E9BAE] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.08] border border-slate-200/80 dark:border-white/10 rounded-xl transition-colors cursor-pointer"
+                className="flex items-center gap-1 px-2 py-1 text-xs font-mono text-slate-600 dark:text-[#8E9BAE] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.08] border border-slate-200/80 dark:border-white/10 rounded-lg transition-colors cursor-pointer shrink-0"
                 title="Changer de langue / Switch language"
               >
-                <Globe size={13} className="text-[#E60039]" />
-                <span className="font-semibold">{lang.toUpperCase()}</span>
-                <span className="text-slate-400 dark:text-white/30 text-[10px]">|</span>
-                <span className="text-slate-500 dark:text-white/50 text-[10px]">{lang === 'fr' ? 'EN' : 'FR'}</span>
+                <Globe size={12} className="text-[#E60039]" />
+                <span className="font-semibold text-[11px]">{lang.toUpperCase()}</span>
+                <span className="text-slate-400 dark:text-white/30 text-[9px]">|</span>
+                <span className="text-slate-500 dark:text-white/50 text-[9px]">{lang === 'fr' ? 'EN' : 'FR'}</span>
               </button>
 
               {/* Zenika Training Link (New Tab) */}
@@ -255,12 +255,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                 href={lang === 'fr' ? 'https://training.zenika.com/fr' : 'https://training.zenika.com'}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden xl:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-[#8E9BAE] hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-all group"
+                className="hidden 2xl:inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-700 dark:text-[#8E9BAE] hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-all group whitespace-nowrap shrink-0"
                 title={lang === 'fr' ? 'Zenika Training · Catalogue formations (ouvre dans un nouvel onglet)' : 'Zenika Training · Course catalog (opens in new tab)'}
               >
-                <GraduationCap size={15} className="text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform" />
+                <GraduationCap size={14} className="text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform" />
                 <span>{lang === 'fr' ? 'Formations' : 'Training'}</span>
-                <ExternalLink size={11} className="text-slate-400 group-hover:text-indigo-600 dark:text-white/40 dark:group-hover:text-indigo-400 transition-colors" />
+                <ExternalLink size={10} className="text-slate-400 group-hover:text-indigo-600 dark:text-white/40 dark:group-hover:text-indigo-400 transition-colors" />
               </a>
 
               {/* Join Us / Carrières Button (Jobs Zenika - New Tab) */}
@@ -268,22 +268,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                 href={lang === 'fr' ? 'https://jobs.zenika.com/fr/' : 'https://jobs.zenika.com/'}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-white/[0.08] border border-slate-200/80 dark:border-white/10 text-xs font-semibold text-slate-800 dark:text-white transition-all shadow-xs group cursor-pointer"
+                className="hidden 2xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/[0.08] border border-slate-200/80 dark:border-white/10 text-xs font-semibold text-slate-800 dark:text-white transition-all shadow-2xs group cursor-pointer whitespace-nowrap shrink-0"
                 title={lang === 'fr' ? 'Carrières & Jobs chez Zenika (ouvre dans un nouvel onglet)' : 'Zenika Careers & Jobs (opens in new tab)'}
               >
-                <ZenikaCodeIcon size={14} className="text-[#E60039] group-hover:scale-110 transition-transform" />
-                <span>{lang === 'fr' ? 'Nous rejoindre' : 'Join Us'}</span>
-                <ExternalLink size={12} className="text-slate-400 group-hover:text-[#E60039] dark:text-white/40 dark:group-hover:text-[#E60039] transition-colors" />
+                <ZenikaCodeIcon size={13} className="text-[#E60039] group-hover:scale-110 transition-transform" />
+                <span>{lang === 'fr' ? 'Rejoindre' : 'Join'}</span>
+                <ExternalLink size={11} className="text-slate-400 group-hover:text-[#E60039] dark:text-white/40 dark:group-hover:text-[#E60039] transition-colors" />
               </a>
 
-              {/* Main Contact Action : Fond blanc et filet rouge */}
+              {/* Main Contact Action : Compact, fin et sans superposition */}
               <button
                 onClick={onOpenContact}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-red-50/40 text-[#E60039] hover:text-[#CC0033] border-2 border-[#E60039] text-xs font-bold rounded-xl shadow-xs hover:shadow-md hover:shadow-[#E60039]/15 transition-all duration-200 cursor-pointer active:scale-95 group"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 bg-white dark:bg-white/5 hover:bg-red-50/50 dark:hover:bg-[#E60039]/15 text-[#E60039] hover:text-[#CC0033] dark:text-[#FF385C] border border-[#E60039] text-xs font-bold rounded-lg shadow-2xs hover:shadow-xs transition-all duration-200 cursor-pointer active:scale-95 whitespace-nowrap shrink-0 group"
               >
-                <Sparkles size={14} className="text-[#E60039] group-hover:rotate-12 transition-transform duration-300" />
+                <Sparkles size={12} className="text-[#E60039] dark:text-[#FF385C] group-hover:rotate-12 transition-transform duration-300" />
                 <span>{lang === 'fr' ? 'Lancer un projet' : 'Start a Project'}</span>
-                <ArrowRight size={13} className="text-[#E60039] group-hover:translate-x-0.5 transition-transform" />
               </button>
             </div>
 

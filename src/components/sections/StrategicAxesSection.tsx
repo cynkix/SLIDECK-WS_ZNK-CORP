@@ -1056,7 +1056,7 @@ export const StrategicAxesSection: React.FC<StrategicAxesSectionProps> = ({
                       </div>
 
                       {/* Les 3 Cartes Piliers : TOUTES LES 3 AFFICHÉES EN PREMIER, DÈS LE DÉPART */}
-                      <div className="space-y-3 sm:space-y-3.5 xl:space-y-4">
+                      <div className="space-y-3.5 sm:space-y-4 xl:space-y-5">
                         {(['optimiser', 'innover', 'transformer'] as StrategicAxisId[]).map((axisKey, idx) => {
                           const conf = axesConfig[axisKey];
                           const isActive = activeAxis === axisKey;
@@ -1086,32 +1086,32 @@ export const StrategicAxesSection: React.FC<StrategicAxesSectionProps> = ({
                                 setHasUserInteracted(true);
                                 setShowClickAnimation(false);
                               }}
-                              className={`group rounded-2xl p-4 sm:p-5 xl:p-6 text-center cursor-pointer transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center will-change-transform ${
+                              className={`group rounded-2xl px-5 py-6 sm:px-6 sm:py-7 xl:px-8 xl:py-8 text-center cursor-pointer transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center will-change-transform ${
                                 isActive
-                                  ? 'shadow-2xl ring-3 ring-white/80 scale-[1.02] opacity-100 z-10 min-h-[125px] sm:min-h-[135px] xl:min-h-[148px]'
-                                  : 'opacity-85 hover:opacity-100 hover:scale-[1.015] hover:shadow-xl min-h-[110px] sm:min-h-[120px] xl:min-h-[132px]'
+                                  ? 'shadow-2xl ring-3 ring-white/80 scale-[1.02] opacity-100 z-10 min-h-[160px] sm:min-h-[175px] xl:min-h-[195px]'
+                                  : 'opacity-85 hover:opacity-100 hover:scale-[1.015] hover:shadow-xl min-h-[145px] sm:min-h-[160px] xl:min-h-[178px]'
                               }`}
                               style={{
                                 background: theme.centerGradient,
                               }}
                             >
                               {/* Titre & Sous-titre */}
-                              <div className="w-full space-y-1">
-                                <div className="flex items-center justify-center gap-2">
-                                  <h4 className="text-xl sm:text-2xl xl:text-3xl font-black font-display uppercase tracking-tight text-white drop-shadow-xs">
+                              <div className="w-full space-y-1.5 sm:space-y-2">
+                                <div className="flex items-center justify-center gap-2.5">
+                                  <h4 className="text-2xl sm:text-3xl xl:text-4xl font-black font-display uppercase tracking-tight text-white drop-shadow-xs">
                                     {conf.title}
                                   </h4>
                                   {isActive && (
                                     <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
                                   )}
                                 </div>
-                                <p className="text-xs sm:text-sm font-medium text-white/95 italic leading-snug">
+                                <p className="text-xs sm:text-sm xl:text-[15px] font-medium text-white/95 italic leading-snug max-w-md mx-auto">
                                   {lang === 'fr' ? conf.taglineFr : conf.taglineEn}
                                 </p>
                               </div>
 
                               {/* Ligne stats informative */}
-                              <div className="mt-2 text-[11px] sm:text-xs font-display text-white/90 leading-tight">
+                              <div className="mt-3 sm:mt-3.5 text-xs sm:text-sm font-display text-white/90 leading-tight">
                                 {lang === 'fr' ? conf.statsBadgeFr : conf.statsBadgeEn}
                               </div>
                             </motion.div>
