@@ -1,5 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'motion/react';
+import { ArrowDown } from 'lucide-react';
 import { Language } from '../../types';
 
 interface ValueBridgeParallaxV2Props {
@@ -8,19 +9,17 @@ interface ValueBridgeParallaxV2Props {
 
 export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ lang }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024);
-    };
+  // Fonction pour passer directement à la section suivante
+  const handleSkipSection = () => {
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const targetY = window.scrollY + rect.bottom;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    }
+  };
 
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Continuous vertical scroll tracking across runway for desktop
+  // Continuous vertical scroll tracking across runway for desktop & mobile
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
@@ -52,8 +51,6 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
   const slide0Red = useTransform(smoothProgress, [0, 0.18], ['#E60039', '#E60039']);
 
   // Slide 1 : Arrive au milieu / centre vers 0.28-0.38
-  // Dès son approche (0.18 -> 0.28), TOUTES les lettres en rouge s'allument
-  // et restent 100% allumées tant que le slide est au centre (0.28 -> 0.48)
   const slide1Red = useTransform(
     smoothProgress,
     [0.12, 0.26, 0.42, 0.52],
@@ -61,8 +58,6 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
   );
 
   // Slide 2 : Arrive au milieu / centre vers 0.58-0.68
-  // Dès son approche (0.48 -> 0.58), TOUTES les lettres en rouge s'allument
-  // et restent 100% allumées tant que le slide est au centre (0.58 -> 0.76)
   const slide2Red = useTransform(
     smoothProgress,
     [0.45, 0.56, 0.72, 0.80],
@@ -76,8 +71,7 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
     ['#94A3B8', '#E60039', '#E60039']
   );
 
-  // Effet de ZOOM final demandé sur la dernière section Engagement Communautés
-  // S'installe majestueusement au centre puis se stabilise
+  // Effet de ZOOM final sur la dernière section Engagement Communautés
   const slide3Zoom = useTransform(
     smoothProgress,
     [0.76, 0.84, 0.98],
@@ -88,202 +82,52 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
     <div
       ref={containerRef}
       id="mission-critical-v2"
-      className="relative w-full bg-white dark:bg-[#07090E] transition-colors"
-      style={{ height: isMobile ? 'auto' : '420vh' }}
+      className="relative w-full bg-white dark:bg-[#07090E] transition-colors h-[380vh] sm:h-[400vh] lg:h-[420vh]"
     >
       {/* ========================================================================= */}
-      {/* VERSION MOBILE : CARROUSEL HORIZONTAL PUR (< lg)                          */}
+      {/* SECTION FIXE ÉPINGLÉE AU SCROLL (MOBILE ET DESKTOP)                       */}
+      {/* Le scroll vertical entraîne le défilement horizontal fluide des slides    */}
       {/* ========================================================================= */}
-      <div className="block lg:hidden w-full py-12 px-4 sm:px-6">
-        <div className="text-center space-y-4 mb-8">
-          <div className="text-xs font-mono font-bold tracking-wider text-[#E60039] uppercase">
+      <div className="sticky top-0 h-screen w-full flex items-center overflow-hidden z-20">
+        
+        {/* Badge discret haut gauche */}
+        <div className="absolute top-4 left-4 sm:top-8 sm:left-8 z-30 flex items-center gap-2 pointer-events-none">
+          <span className="px-2.5 py-1 rounded-full bg-slate-100/90 dark:bg-white/10 backdrop-blur-md text-[10px] sm:text-xs font-mono font-bold text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-white/10 uppercase">
             {lang === 'fr' ? '02 / NOTRE ENGAGEMENT' : '02 / OUR COMMITMENT'}
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-black font-display text-black dark:text-white tracking-tight leading-tight">
-            {lang === 'fr' ? (
-              <>
-                Nous apportons structure, méthodologie et expertise dans les projets{' '}
-                <span className="text-[#E60039] font-black">“mission critical”</span>
-              </>
-            ) : (
-              <>
-                We bring structure, methodology, and expertise into{' '}
-                <span className="text-[#E60039] font-black">“mission critical”</span> projects
-              </>
-            )}
-          </h2>
+          </span>
         </div>
 
-        {/* Défilement horizontal naturel mobile avec snap */}
-        <div className="flex gap-4 overflow-x-auto pb-6 pt-2 snap-x snap-mandatory scrollbar-none px-2">
-          {/* Slide 1 - Innovation */}
-          <div className="min-w-[85vw] sm:min-w-[400px] snap-center p-6 rounded-2xl bg-slate-50/70 dark:bg-white/[0.03] border border-slate-200/60 dark:border-white/10 flex flex-col justify-center text-center space-y-3">
-            <h3 className="text-2xl font-black font-display text-[#E60039] leading-tight">
-              {lang === 'fr' ? (
-                <>Veille et culture de<br />l'innovation</>
-              ) : (
-                <>Tech watch & culture<br />of innovation</>
-              )}
-            </h3>
-            <p className="text-sm font-bold text-black dark:text-white leading-relaxed">
-              {lang === 'fr' ? (
-                <>
-                  De la veille sur les <span className="text-[#E60039] font-black">dernières innovations</span>, des déclinaisons <span className="text-[#E60039] font-black">pragmatiques</span> dans les SI
-                </>
-              ) : (
-                <>
-                  Continuous watch on the <span className="text-[#E60039] font-black">latest breakthroughs</span>, delivered through <span className="text-[#E60039] font-black">pragmatic</span> enterprise IT
-                </>
-              )}
-            </p>
-          </div>
+        {/* Bouton discret "Passer la section" (texte gris sans fond noir) */}
+        <button
+          onClick={handleSkipSection}
+          className="absolute bottom-4 right-4 sm:bottom-6 sm:right-8 z-30 inline-flex items-center gap-1.5 text-slate-400 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-300 text-xs font-mono font-medium transition-colors cursor-pointer group"
+          aria-label={lang === 'fr' ? 'Passer la section suivante' : 'Skip to next section'}
+        >
+          <span className="underline decoration-slate-300/60 dark:decoration-slate-600/60 underline-offset-4 group-hover:decoration-slate-600 dark:group-hover:decoration-slate-400 transition-colors">
+            {lang === 'fr' ? 'Passer la section' : 'Skip section'}
+          </span>
+          <ArrowDown size={13} className="group-hover:translate-y-0.5 transition-transform" />
+        </button>
 
-          {/* Slide 1 - Offre complète */}
-          <div className="min-w-[85vw] sm:min-w-[400px] snap-center p-6 rounded-2xl bg-slate-50/70 dark:bg-white/[0.03] border border-slate-200/60 dark:border-white/10 flex flex-col justify-center space-y-3.5 text-left">
-            <h4 className="text-lg font-black font-display uppercase tracking-tight text-black dark:text-white">
-              {lang === 'fr' ? 'Une offre de service complète' : 'A complete service offering'}
-            </h4>
-            <div className="space-y-2.5 text-xs">
-              <div>
-                <div className="font-bold uppercase tracking-wider text-[#E60039] font-mono text-[11px]">
-                  {lang === 'fr' ? 'Sur tout le cycle de vie' : 'Across the full lifecycle'}
-                </div>
-                <div className="text-black dark:text-slate-200 font-semibold uppercase text-[10.5px]">
-                  {lang === 'fr' ? 'conception, développement, maintenance' : 'scoping, development, maintenance'}
-                </div>
-              </div>
-              <div>
-                <div className="font-bold uppercase tracking-wider text-[#E60039] font-mono text-[11px]">
-                  {lang === 'fr' ? 'Via des approches complètes' : 'Through comprehensive approaches'}
-                </div>
-                <div className="text-black dark:text-slate-200 font-semibold uppercase text-[10.5px]">
-                  {lang === 'fr' ? 'orchestrant conseil, réalisation et formation' : 'orchestrating advisory, delivery and training'}
-                </div>
-              </div>
-              <div>
-                <div className="font-bold uppercase tracking-wider text-[#E60039] font-mono text-[11px]">
-                  {lang === 'fr' ? 'Pour tous les niveaux de l’organisation' : 'For all organizational tiers'}
-                </div>
-                <div className="text-black dark:text-slate-200 font-semibold uppercase text-[10.5px]">
-                  {lang === 'fr' ? 'exécution, décision, stratégie' : 'execution, decision, strategy'}
-                </div>
-              </div>
-              <div>
-                <div className="font-bold uppercase tracking-wider text-[#E60039] font-mono text-[11px]">
-                  {lang === 'fr' ? 'Dans des modèles d’intervention flexibles' : 'With flexible engagement models'}
-                </div>
-                <div className="text-black dark:text-slate-200 font-semibold uppercase text-[10.5px]">
-                  {lang === 'fr' ? 'engagement, localisation, squads dédiées...' : 'commitment, location, dedicated squads...'}
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* Barre de progression fine au bas de la section */}
+        <motion.div
+          style={{ scaleX: smoothProgress, transformOrigin: '0% 50%' }}
+          className="absolute bottom-0 left-0 right-0 h-1 bg-[#E60039] z-30 pointer-events-none"
+        />
 
-          {/* Slide 2 - Craft & Excellence */}
-          <div className="min-w-[85vw] sm:min-w-[400px] snap-center p-6 rounded-2xl bg-slate-50/70 dark:bg-white/[0.03] border border-slate-200/60 dark:border-white/10 flex flex-col justify-center text-center space-y-3">
-            <h3 className="text-2xl font-black font-display text-[#E60039] leading-tight">
-              {lang === 'fr' ? (
-                <>Excellence et expertise<br />technique</>
-              ) : (
-                <>Technical craft &<br />senior expertise</>
-              )}
-            </h3>
-            <p className="text-sm font-bold text-black dark:text-white leading-relaxed">
-              {lang === 'fr' ? (
-                <>
-                  <span className="text-[#E60039] font-black">Parties prenantes</span> de la réussite des projets, amenant expérience, expertise et <span className="text-[#E60039] font-black">rigueur</span>
-                </>
-              ) : (
-                <>
-                  <span className="text-[#E60039] font-black">True co-owners</span> of project success, bringing battle-tested expertise and engineering <span className="text-[#E60039] font-black">rigor</span>
-                </>
-              )}
-            </p>
-          </div>
-
-          {/* Slide 2 - Convictions */}
-          <div className="min-w-[85vw] sm:min-w-[400px] snap-center p-6 rounded-2xl bg-slate-50/70 dark:bg-white/[0.03] border border-slate-200/60 dark:border-white/10 flex flex-col justify-center space-y-3.5 text-left">
-            <h4 className="text-lg font-black font-display uppercase tracking-tight text-black dark:text-white">
-              {lang === 'fr' ? "Des convictions dans l'exécution" : 'Firm convictions in execution'}
-            </h4>
-            <div className="space-y-2.5 text-xs">
-              <div>
-                <div className="font-bold uppercase tracking-wider text-[#E60039] font-mono text-[11px]">
-                  {lang === 'fr' ? 'Modulariser' : 'Modularize'}
-                </div>
-                <div className="text-black dark:text-slate-200 font-semibold uppercase text-[10.5px]">
-                  {lang === 'fr' ? 'et paralléliser plutôt que passer à l’échelle sans structure' : 'and parallelize rather than scale without governance'}
-                </div>
-              </div>
-              <div>
-                <div className="font-bold uppercase tracking-wider text-[#E60039] font-mono text-[11px]">
-                  {lang === 'fr' ? 'De petites équipes expertes' : 'Lean expert squads'}
-                </div>
-                <div className="text-black dark:text-slate-200 font-semibold uppercase text-[10.5px]">
-                  {lang === 'fr' ? 'plutôt que de grands plateaux projets' : 'rather than bloated commodity factories'}
-                </div>
-              </div>
-              <div>
-                <div className="font-bold uppercase tracking-wider text-[#E60039] font-mono text-[11px]">
-                  {lang === 'fr' ? 'L’IA comme accélérateur' : 'AI as an accelerator'}
-                </div>
-                <div className="text-black dark:text-slate-200 font-semibold uppercase text-[10.5px]">
-                  {lang === 'fr' ? 'plutôt qu’en remplacement' : 'rather than blind replacement'}
-                </div>
-              </div>
-              <div>
-                <div className="font-bold uppercase tracking-wider text-[#E60039] font-mono text-[11px]">
-                  {lang === 'fr' ? 'Une vélocité soutenue par la qualité' : 'Velocity sustained by craft'}
-                </div>
-                <div className="text-black dark:text-slate-200 font-semibold uppercase text-[10.5px]">
-                  {lang === 'fr' ? 'plutôt que du logiciel à la va-vite' : 'rather than fragile shortcuts'}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Slide 3 - Communautés */}
-          <div className="min-w-[85vw] sm:min-w-[400px] snap-center p-6 rounded-2xl bg-slate-50/70 dark:bg-white/[0.03] border border-slate-200/60 dark:border-white/10 flex flex-col justify-center text-center space-y-3">
-            <h3 className="text-2xl font-black font-display text-[#E60039] leading-tight">
-              {lang === 'fr' ? (
-                <>Engagement dans les<br />communautés</>
-              ) : (
-                <>Community & open<br />ecosystem leadership</>
-              )}
-            </h3>
-            <p className="text-sm font-bold text-black dark:text-white leading-relaxed">
-              {lang === 'fr' ? (
-                <>
-                  <span className="text-[#E60039] font-black">Communautés</span> de pratiques, <span className="text-[#E60039] font-black">conférences</span>, contributions <span className="text-[#E60039] font-black">open-source</span>
-                </>
-              ) : (
-                <>
-                  <span className="text-[#E60039] font-black">Communities</span> of practice, world-class <span className="text-[#E60039] font-black">conferences</span>, major <span className="text-[#E60039] font-black">open-source</span> contributions
-                </>
-              )}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* ========================================================================= */}
-      {/* VERSION DESKTOP : SCROLL HORIZONTAL STRICTEMENT CONFORME À LA MAQUETTE    */}
-      {/* Espacement compact sans trou, toutes lettres en rouge allumées au centre */}
-      {/* ========================================================================= */}
-      <div className="hidden lg:flex sticky top-0 h-screen w-full items-center overflow-hidden z-20">
+        {/* CONTENEUR PLEIN ÉCRAN DES SLIDES HORIZONTAUX */}
         <div className="w-full h-full relative flex items-center overflow-hidden">
           
-          {/* BANDE HORIZONTALE COMPOSÉE DES 4 SLIDES (3 SLIDES MAQUETTE + INTRO) */}
           <motion.div
             style={{ x: horizontalX }}
             className="flex items-center h-full will-change-transform"
           >
             {/* ================================================================= */}
-            {/* SLIDE 0 : OUVERTURE / INTRO (AFFICHÉ SEUL EN PREMIER)             */}
+            {/* SLIDE 0 : OUVERTURE / INTRO                                       */}
             {/* ================================================================= */}
-            <div className="w-screen shrink-0 h-full flex flex-col items-center justify-center px-8 lg:px-16 text-center">
+            <div className="w-screen shrink-0 h-full flex flex-col items-center justify-center px-6 sm:px-12 lg:px-16 text-center">
               <div className="max-w-4xl mx-auto space-y-4">
-                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[54px] font-black font-display text-black dark:text-white tracking-tight leading-[1.12]">
+                <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[54px] font-black font-display text-black dark:text-white tracking-tight leading-[1.14]">
                   {lang === 'fr' ? (
                     <>
                       Nous apportons structure,<br />
@@ -308,18 +152,17 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
             </div>
 
             {/* ================================================================= */}
-            {/* SLIDE 1 (MAQUETTE) : INNOVATION & OFFRE COMPLÈTE                  */}
-            {/* Les deux colonnes sont réunies avec un espacement équilibré       */}
-            {/* Toutes les lettres rouges s'allument à l'arrivée au centre        */}
+            {/* SLIDE 1 : INNOVATION & OFFRE COMPLÈTE                             */}
+            {/* Adapté responsive : 1 colonne mobile / 2 colonnes desktop         */}
             {/* ================================================================= */}
-            <div className="w-screen shrink-0 h-full flex items-center justify-center px-8 lg:px-16 xl:px-24">
-              <div className="flex flex-row items-center justify-center gap-12 lg:gap-16 xl:gap-24 max-w-6xl mx-auto w-full">
+            <div className="w-screen shrink-0 h-full flex items-center justify-center px-4 sm:px-8 lg:px-16 xl:px-24">
+              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-center gap-5 sm:gap-8 lg:gap-16 xl:gap-24 max-w-6xl mx-auto w-full max-h-[82vh] overflow-y-auto lg:overflow-visible py-2">
                 
                 {/* Colonne Gauche : Veille et culture de l'innovation */}
-                <div className="w-[46%] max-w-[480px] text-left space-y-3">
+                <div className="w-full lg:w-[46%] max-w-[480px] text-left space-y-2 sm:space-y-3 shrink-0">
                   <motion.h3
                     style={{ color: slide1Red }}
-                    className="text-3xl sm:text-4xl lg:text-[42px] xl:text-[48px] font-black font-display tracking-tight leading-[1.08] transition-colors"
+                    className="text-xl sm:text-3xl lg:text-[42px] xl:text-[48px] font-black font-display tracking-tight leading-[1.08] transition-colors"
                   >
                     {lang === 'fr' ? (
                       <>
@@ -334,7 +177,7 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
                     )}
                   </motion.h3>
 
-                  <p className="text-base sm:text-lg lg:text-[21px] font-bold leading-snug text-black dark:text-white pt-1">
+                  <p className="text-xs sm:text-base lg:text-[21px] font-bold leading-snug text-black dark:text-white pt-0.5 sm:pt-1">
                     {lang === 'fr' ? (
                       <>
                         De la veille sur les{' '}
@@ -364,20 +207,20 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
                 </div>
 
                 {/* Colonne Droite : Une offre de service complète */}
-                <div className="w-[54%] max-w-[540px] text-left space-y-3 border-l-2 border-slate-200/70 dark:border-white/10 pl-10 lg:pl-14">
-                  <h4 className="text-xl sm:text-2xl lg:text-[26px] font-black font-display uppercase tracking-tight text-black dark:text-white leading-tight">
+                <div className="w-full lg:w-[54%] max-w-[540px] text-left space-y-2 sm:space-y-3 border-t-2 lg:border-t-0 lg:border-l-2 border-slate-200/70 dark:border-white/10 pt-3 lg:pt-0 pl-0 lg:pl-10 xl:pl-14">
+                  <h4 className="text-sm sm:text-xl lg:text-[26px] font-black font-display uppercase tracking-tight text-black dark:text-white leading-tight">
                     {lang === 'fr' ? 'UNE OFFRE DE SERVICE COMPLÈTE' : 'A COMPLETE SERVICE OFFERING'}
                   </h4>
 
-                  <div className="space-y-2.5">
+                  <div className="space-y-1.5 sm:space-y-2.5">
                     <div>
                       <motion.div
                         style={{ color: slide1Red }}
-                        className="text-xs sm:text-sm font-black uppercase tracking-wider font-mono transition-colors"
+                        className="text-[10px] sm:text-sm font-black uppercase tracking-wider font-mono transition-colors"
                       >
                         {lang === 'fr' ? 'SUR TOUT LE CYCLE DE VIE' : 'ACROSS THE FULL LIFECYCLE'}
                       </motion.div>
-                      <div className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-slate-200">
+                      <div className="text-[9.5px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-slate-200">
                         {lang === 'fr' ? 'CONCEPTION, DÉVELOPPEMENT, MAINTENANCE' : 'SCOPING, DEVELOPMENT, MAINTENANCE'}
                       </div>
                     </div>
@@ -385,11 +228,11 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
                     <div>
                       <motion.div
                         style={{ color: slide1Red }}
-                        className="text-xs sm:text-sm font-black uppercase tracking-wider font-mono transition-colors"
+                        className="text-[10px] sm:text-sm font-black uppercase tracking-wider font-mono transition-colors"
                       >
                         {lang === 'fr' ? 'VIA DES APPROCHES COMPLÈTES' : 'THROUGH COMPREHENSIVE APPROACHES'}
                       </motion.div>
-                      <div className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-slate-200">
+                      <div className="text-[9.5px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-slate-200">
                         {lang === 'fr' ? 'ORCHESTRANT CONSEIL, RÉALISATION ET FORMATION' : 'ORCHESTRATING ADVISORY, DELIVERY AND TRAINING'}
                       </div>
                     </div>
@@ -397,11 +240,11 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
                     <div>
                       <motion.div
                         style={{ color: slide1Red }}
-                        className="text-xs sm:text-sm font-black uppercase tracking-wider font-mono transition-colors"
+                        className="text-[10px] sm:text-sm font-black uppercase tracking-wider font-mono transition-colors"
                       >
                         {lang === 'fr' ? 'POUR TOUS LES NIVEAUX DE L’ORGANISATION' : 'FOR ALL ORGANIZATIONAL TIERS'}
                       </motion.div>
-                      <div className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-slate-200">
+                      <div className="text-[9.5px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-slate-200">
                         {lang === 'fr' ? 'EXÉCUTION, DÉCISION, STRATÉGIE' : 'EXECUTION, DECISION, STRATEGY'}
                       </div>
                     </div>
@@ -409,11 +252,11 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
                     <div>
                       <motion.div
                         style={{ color: slide1Red }}
-                        className="text-xs sm:text-sm font-black uppercase tracking-wider font-mono transition-colors"
+                        className="text-[10px] sm:text-sm font-black uppercase tracking-wider font-mono transition-colors"
                       >
                         {lang === 'fr' ? 'DANS DES MODÈLES D’INTERVENTION FLEXIBLES' : 'WITH FLEXIBLE ENGAGEMENT MODELS'}
                       </motion.div>
-                      <div className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-slate-200">
+                      <div className="text-[9.5px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-slate-200">
                         {lang === 'fr' ? 'ENGAGEMENT, LOCALISATION, SQUADS DÉDIÉES...' : 'COMMITMENT, LOCATION, SQUADS...'}
                       </div>
                     </div>
@@ -424,18 +267,17 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
             </div>
 
             {/* ================================================================= */}
-            {/* SLIDE 2 (MAQUETTE) : CRAFT, EXPERTISE & CONVICTIONS               */}
-            {/* Les deux colonnes sont réunies avec un espacement équilibré       */}
-            {/* Toutes les lettres rouges s'allument à l'arrivée au centre        */}
+            {/* SLIDE 2 : CRAFT, EXPERTISE & CONVICTIONS                          */}
+            {/* Adapté responsive : 1 colonne mobile / 2 colonnes desktop         */}
             {/* ================================================================= */}
-            <div className="w-screen shrink-0 h-full flex items-center justify-center px-8 lg:px-16 xl:px-24">
-              <div className="flex flex-row items-center justify-center gap-12 lg:gap-16 xl:gap-24 max-w-6xl mx-auto w-full">
+            <div className="w-screen shrink-0 h-full flex items-center justify-center px-4 sm:px-8 lg:px-16 xl:px-24">
+              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-center gap-5 sm:gap-8 lg:gap-16 xl:gap-24 max-w-6xl mx-auto w-full max-h-[82vh] overflow-y-auto lg:overflow-visible py-2">
                 
                 {/* Colonne Gauche : Excellence et expertise technique */}
-                <div className="w-[46%] max-w-[480px] text-left space-y-3">
+                <div className="w-full lg:w-[46%] max-w-[480px] text-left space-y-2 sm:space-y-3 shrink-0">
                   <motion.h3
                     style={{ color: slide2Red }}
-                    className="text-3xl sm:text-4xl lg:text-[42px] xl:text-[48px] font-black font-display tracking-tight leading-[1.08] transition-colors"
+                    className="text-xl sm:text-3xl lg:text-[42px] xl:text-[48px] font-black font-display tracking-tight leading-[1.08] transition-colors"
                   >
                     {lang === 'fr' ? (
                       <>
@@ -450,7 +292,7 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
                     )}
                   </motion.h3>
 
-                  <p className="text-base sm:text-lg lg:text-[21px] font-bold leading-snug text-black dark:text-white pt-1">
+                  <p className="text-xs sm:text-base lg:text-[21px] font-bold leading-snug text-black dark:text-white pt-0.5 sm:pt-1">
                     {lang === 'fr' ? (
                       <>
                         <motion.span style={{ color: slide2Red }} className="font-black transition-colors">
@@ -476,20 +318,20 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
                 </div>
 
                 {/* Colonne Droite : Des convictions dans l'exécution */}
-                <div className="w-[54%] max-w-[540px] text-left space-y-3 border-l-2 border-slate-200/70 dark:border-white/10 pl-10 lg:pl-14">
-                  <h4 className="text-xl sm:text-2xl lg:text-[26px] font-black font-display uppercase tracking-tight text-black dark:text-white leading-tight">
+                <div className="w-full lg:w-[54%] max-w-[540px] text-left space-y-2 sm:space-y-3 border-t-2 lg:border-t-0 lg:border-l-2 border-slate-200/70 dark:border-white/10 pt-3 lg:pt-0 pl-0 lg:pl-10 xl:pl-14">
+                  <h4 className="text-sm sm:text-xl lg:text-[26px] font-black font-display uppercase tracking-tight text-black dark:text-white leading-tight">
                     {lang === 'fr' ? "DES CONVICTIONS DANS L'EXÉCUTION" : "FIRM CONVICTIONS IN EXECUTION"}
                   </h4>
 
-                  <div className="space-y-2.5">
+                  <div className="space-y-1.5 sm:space-y-2.5">
                     <div>
                       <motion.div
                         style={{ color: slide2Red }}
-                        className="text-xs sm:text-sm font-black uppercase tracking-wider font-mono transition-colors"
+                        className="text-[10px] sm:text-sm font-black uppercase tracking-wider font-mono transition-colors"
                       >
                         {lang === 'fr' ? 'MODULARISER' : 'MODULARIZE'}
                       </motion.div>
-                      <div className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-slate-200">
+                      <div className="text-[9.5px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-slate-200">
                         {lang === 'fr'
                           ? 'ET PARALLÉLISER PLUTÔT QUE PASSER À L’ÉCHELLE SANS STRUCTURE'
                           : 'AND PARALLELIZE RATHER THAN SCALE WITHOUT GOVERNANCE'}
@@ -499,11 +341,11 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
                     <div>
                       <motion.div
                         style={{ color: slide2Red }}
-                        className="text-xs sm:text-sm font-black uppercase tracking-wider font-mono transition-colors"
+                        className="text-[10px] sm:text-sm font-black uppercase tracking-wider font-mono transition-colors"
                       >
                         {lang === 'fr' ? 'DE PETITES ÉQUIPES EXPERTES' : 'LEAN EXPERT SQUADS'}
                       </motion.div>
-                      <div className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-slate-200">
+                      <div className="text-[9.5px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-slate-200">
                         {lang === 'fr'
                           ? 'PLUTÔT QUE DE GRANDS PLATEAUX PROJETS'
                           : 'RATHER THAN BLOATED COMMODITY FACTORIES'}
@@ -513,11 +355,11 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
                     <div>
                       <motion.div
                         style={{ color: slide2Red }}
-                        className="text-xs sm:text-sm font-black uppercase tracking-wider font-mono transition-colors"
+                        className="text-[10px] sm:text-sm font-black uppercase tracking-wider font-mono transition-colors"
                       >
                         {lang === 'fr' ? 'L’IA COMME ACCÉLÉRATEUR' : 'AI AS AN ACCELERATOR'}
                       </motion.div>
-                      <div className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-slate-200">
+                      <div className="text-[9.5px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-slate-200">
                         {lang === 'fr'
                           ? 'PLUTÔT QU’EN REMPLACEMENT'
                           : 'RATHER THAN BLIND REPLACEMENT'}
@@ -527,11 +369,11 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
                     <div>
                       <motion.div
                         style={{ color: slide2Red }}
-                        className="text-xs sm:text-sm font-black uppercase tracking-wider font-mono transition-colors"
+                        className="text-[10px] sm:text-sm font-black uppercase tracking-wider font-mono transition-colors"
                       >
                         {lang === 'fr' ? 'UNE VÉLOCITÉ SOUTENUE PAR LA QUALITÉ' : 'VELOCITY SUSTAINED BY CRAFT'}
                       </motion.div>
-                      <div className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-slate-200">
+                      <div className="text-[9.5px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-slate-200">
                         {lang === 'fr'
                           ? 'PLUTÔT QUE DU LOGICIEL À LA VA-VITE'
                           : 'RATHER THAN FRAGILE SHORTCUTS'}
@@ -544,17 +386,16 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
             </div>
 
             {/* ================================================================= */}
-            {/* SLIDE 3 (MAQUETTE) : ENGAGEMENT DANS LES COMMUNAUTÉS              */}
-            {/* Parfaitement centré au milieu de l'écran avec pause & zoom final  */}
+            {/* SLIDE 3 : ENGAGEMENT DANS LES COMMUNAUTÉS                         */}
             {/* ================================================================= */}
-            <div className="w-screen shrink-0 h-full flex items-center justify-center px-6 sm:px-10 lg:px-16">
+            <div className="w-screen shrink-0 h-full flex items-center justify-center px-4 sm:px-10 lg:px-16">
               <motion.div
                 style={{ scale: slide3Zoom, transformOrigin: 'center center' }}
                 className="max-w-3xl mx-auto w-full text-center space-y-4 will-change-transform"
               >
                 <motion.h3
                   style={{ color: slide3Red }}
-                  className="text-3xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[54px] font-black font-display tracking-tight leading-[1.08] transition-colors"
+                  className="text-2xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[54px] font-black font-display tracking-tight leading-[1.08] transition-colors"
                 >
                   {lang === 'fr' ? (
                     <>
@@ -569,7 +410,7 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
                   )}
                 </motion.h3>
 
-                <p className="text-lg sm:text-xl lg:text-[23px] font-bold leading-snug max-w-xl mx-auto text-black dark:text-white">
+                <p className="text-sm sm:text-lg lg:text-[23px] font-bold leading-snug max-w-xl mx-auto text-black dark:text-white">
                   {lang === 'fr' ? (
                     <>
                       <motion.span style={{ color: slide3Red }} className="font-black transition-colors">
@@ -612,3 +453,4 @@ export const ValueBridgeParallaxV2: React.FC<ValueBridgeParallaxV2Props> = ({ la
 };
 
 export default ValueBridgeParallaxV2;
+

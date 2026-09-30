@@ -95,7 +95,7 @@ export const Version1Fluid: React.FC<Version1FluidProps> = ({
       {/* ========================================================================= */}
       {/* 02. IMPACT & WHY - NOS CONVICTIONS (20 ANS D'EXPÉRIENCE)                  */}
       {/* ========================================================================= */}
-      <div id="why" className="relative z-10 scroll-mt-24">
+      <div id="why" className="relative z-10 scroll-mt-24 bg-white dark:bg-[#07090E] border-t border-slate-200 dark:border-white/10 transition-colors py-4 sm:py-8">
         <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* ========================================================================= */}
           {/* INDICATEURS CLÉS & VALEUR MÉTIER                                          */}
