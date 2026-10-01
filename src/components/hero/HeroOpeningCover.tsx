@@ -303,29 +303,29 @@ export const HeroOpeningCover: React.FC<HeroOpeningCoverProps> = ({ lang, onDisc
     let pointerEvents: 'none' | 'auto' = 'none';
 
     if (sIdx === 0) {
-      // Strophe 1 : Montée continue en recouvrement avec la sortie du logo (zéro écran blanc)
-      if (scrollProgress < 0.20) {
-        return { scale: 1.0, opacity: 0, y: 220, pointerEvents: 'none', isVisible: false };
-      } else if (scrollProgress < 0.28) {
-        const enterRatio = (scrollProgress - 0.20) / 0.08;
+      // Strophe 1 : Arrive successivement APRÈS la disparition complète du logo (zéro superposition)
+      if (scrollProgress < 0.24) {
+        return { scale: 1.0, opacity: 0, y: 140, pointerEvents: 'none', isVisible: false };
+      } else if (scrollProgress < 0.31) {
+        const enterRatio = (scrollProgress - 0.24) / 0.07;
         const ease = 1 - Math.pow(1 - enterRatio, 2);
         scale = 1.0;
         opacity = enterRatio;
-        y = (1 - ease) * 220;
+        y = (1 - ease) * 140;
         pointerEvents = enterRatio > 0.6 ? 'auto' : 'none';
       } else if (scrollProgress <= 0.52) {
         scale = 1.0;
         opacity = 1.0;
         y = 0;
         pointerEvents = 'auto';
-      } else if (scrollProgress <= 0.60) {
-        const exitRatio = (scrollProgress - 0.52) / 0.08;
+      } else if (scrollProgress <= 0.59) {
+        const exitRatio = (scrollProgress - 0.52) / 0.07;
         scale = 1.0;
         opacity = Math.max(0, 1 - exitRatio);
-        y = -exitRatio * 220;
+        y = -exitRatio * 200;
         pointerEvents = 'none';
       } else {
-        return { scale: 1.0, opacity: 0, y: -220, pointerEvents: 'none', isVisible: false };
+        return { scale: 1.0, opacity: 0, y: -200, pointerEvents: 'none', isVisible: false };
       }
     } else {
       // Strophe 2 (Finale) : Montée immédiate en relais de la Strophe 1
@@ -400,7 +400,7 @@ export const HeroOpeningCover: React.FC<HeroOpeningCoverProps> = ({ lang, onDisc
             {/* ===================================================================== */}
             {/* OPENING HERO LOGO: WIREFRAME Z TO SOLID LOGO CONSTRUCTION ON SCROLL   */}
             {/* ===================================================================== */}
-            {scrollProgress < 0.34 && (() => {
+            {scrollProgress < 0.24 && (() => {
               // 1. Trail stretch: unfolds dynamically and stays fully deployed
               const stretchFactor = Math.min(1.4, scrollProgress / 0.07);
 
@@ -409,10 +409,10 @@ export const HeroOpeningCover: React.FC<HeroOpeningCoverProps> = ({ lang, onDisc
               // From 0.008 to 0.075: the true solid logo builds itself and crystallizes from the lines
               const solidLogoOpacity = Math.max(0, Math.min(1, (scrollProgress - 0.006) / 0.065));
 
-              // 3. Accentuer l'effet d'intro plus longtemps:
-              // Les traits restent visibles beaucoup plus longtemps (de 0.015 jusqu'à 0.26)
+              // 3. Extended trail presence:
+              // Traits restent visibles pendant l'intro, puis s'estompent à la sortie du logo
               const trailAppear = Math.min(1, scrollProgress / 0.02);
-              const trailDisappear = scrollProgress < 0.24 ? 1 : Math.max(0, 1 - (scrollProgress - 0.24) / 0.08);
+              const trailDisappear = scrollProgress < 0.18 ? 1 : Math.max(0, 1 - (scrollProgress - 0.18) / 0.06);
               const trailOpacity = trailAppear * trailDisappear;
 
               // 4. Logo reduction from large wireframe start down to lockup scale:
@@ -427,17 +427,14 @@ export const HeroOpeningCover: React.FC<HeroOpeningCoverProps> = ({ lang, onDisc
               const textOpacity = textReveal;
               const textY = (1 - textReveal) * 16;
 
-              // 6. Ascent and fade out (Zero white gap: stays centered until 0.20, then hands over directly to Stanza 1):
-              // Stays centered from 0.00 to 0.20
-              // Moves upward from 0.20 to 0.33
-              const upwardProgress = scrollProgress < 0.20 ? 0 : Math.min(1, (scrollProgress - 0.20) / 0.12);
-              const upwardEase = Math.pow(upwardProgress, 1.15);
-              const containerY = -upwardEase * 360;
-
-              // Fade out synchronized with Stanza 1's arrival (fades out as it exits top, from 0.23 to 0.32)
-              const fadeOutProgress = scrollProgress < 0.23 ? 0 : Math.min(1, (scrollProgress - 0.23) / 0.09);
-              const containerOpacity = Math.max(0, 1 - fadeOutProgress);
-              const containerScale = 1 - upwardProgress * 0.06;
+              // 6. Complete exit before Stanza 1 (strictly successive, zero superposition):
+              // Stays centered from 0.00 to 0.17
+              // Moves upward and fades out cleanly from 0.17 to 0.24
+              const exitProgress = scrollProgress < 0.17 ? 0 : Math.min(1, (scrollProgress - 0.17) / 0.07);
+              const exitEase = Math.pow(exitProgress, 1.15);
+              const containerY = -exitEase * 360;
+              const containerOpacity = Math.max(0, 1 - exitProgress);
+              const containerScale = 1 - exitProgress * 0.06;
 
               return (
                 <div
