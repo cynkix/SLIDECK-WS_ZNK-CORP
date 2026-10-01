@@ -1,16 +1,10 @@
 import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   ArrowDown, 
-  ChevronDown,
-  ArrowRight
+  ChevronDown
 } from 'lucide-react';
 import { Language } from '../../types';
-import { 
-  ZenikaMonogram,
-  ZenikaConseilIcon,
-  ZenikaRealisationIcon,
-  ZenikaFormationIcon
-} from '../brand';
+import { ZenikaMonogram, ZenikaTrailMonogram } from '../brand';
 
 interface HeroOpeningCoverProps {
   lang: Language;
@@ -22,7 +16,7 @@ export type IntroVersion = 'v1' | 'v2' | 'v3' | 'v4';
 interface WordToken {
   fr: string;
   en: string;
-  highlight?: 'red' | 'cyan' | 'amber' | 'violet' | 'green' | 'brand' | 'white-bold';
+  highlight?: 'red' | 'cyan' | 'amber' | 'violet' | 'green' | 'brand' | 'white-bold' | 'sky-blue' | 'coral-amber' | 'black';
   noWrapWithNext?: boolean;
 }
 
@@ -48,7 +42,7 @@ const MANIFEST_STANZAS: readonly ManifestStanza[] = [
     tagFr: 'CONTEXTE & DÉFI IT',
     tagEn: 'CONTEXT & IT CHALLENGE',
     accent: '#5090F4',
-    rangeStart: 0.12,
+    rangeStart: 0.26,
     rangeEnd: 0.52,
     lines: [
       {
@@ -98,28 +92,36 @@ const MANIFEST_STANZAS: readonly ManifestStanza[] = [
     tagFr: "L'AUGMENTATION ZENIKA",
     tagEn: "THE ZENIKA IMPACT",
     accent: '#E60039',
-    rangeStart: 0.52,
+    rangeStart: 0.58,
     rangeEnd: 1.0,
     lines: [
       {
         words: [
           { fr: "Zenika", en: "Zenika", highlight: 'brand' },
-          { fr: "est", en: "is" },
-          { fr: "le", en: "the" },
-          { fr: "partenaire", en: "proximity", highlight: 'white-bold' },
-          { fr: "technologique", en: "technology", highlight: 'cyan' },
-          { fr: "de", en: "partner" },
-          { fr: "proximité", en: "", highlight: 'amber' },
+          { fr: "est", en: "is", highlight: 'black' },
+          { fr: "le", en: "the", highlight: 'black' },
+          { fr: "partenaire", en: "partner", highlight: 'black' },
         ],
       },
       {
         words: [
-          { fr: "qui", en: "that" },
-          { fr: "augmente", en: "amplifies", highlight: 'white-bold' },
-          { fr: "l’impact", en: "the" },
+          { fr: "technologique", en: "technology", highlight: 'sky-blue' },
+          { fr: "de", en: "of", highlight: 'black' },
+          { fr: "proximité", en: "proximity", highlight: 'coral-amber' },
+        ],
+      },
+      {
+        words: [
+          { fr: "qui", en: "that", highlight: 'black' },
+          { fr: "augmente", en: "amplifies", highlight: 'black' },
+          { fr: "l’impact", en: "the", highlight: 'black' },
           { fr: "métier", en: "business", highlight: 'red' },
-          { fr: "de", en: "impact" },
-          { fr: "votre", en: "of your", noWrapWithNext: true },
+          { fr: "de", en: "impact of", highlight: 'black' },
+        ],
+      },
+      {
+        words: [
+          { fr: "votre", en: "your", highlight: 'black', noWrapWithNext: true },
           { fr: "SI.", en: "IT.", highlight: 'brand' },
         ],
       },
@@ -210,7 +212,7 @@ export const HeroOpeningCover: React.FC<HeroOpeningCoverProps> = ({ lang, onDisc
   }, [onDiscover, handleScrollToContent]);
 
   // Derived calculations during render (Rule 5.1)
-  const cardsArrivalProgress = Math.max(0, Math.min(1, (scrollProgress - 0.74) / 0.08));
+  const cardsArrivalProgress = Math.max(0, Math.min(1, (scrollProgress - 0.78) / 0.08));
 
   // Pre-calculate flattened words per stanza for fast indexed lookups
   const stanzasWords = useMemo(
@@ -247,16 +249,18 @@ export const HeroOpeningCover: React.FC<HeroOpeningCoverProps> = ({ lang, onDisc
 
       switch (highlight) {
         case 'brand':
+        case 'red':
           colorClasses = 'text-[#E60039] font-black drop-shadow-[0_4px_16px_rgba(230,0,57,0.22)]';
           break;
+        case 'sky-blue':
         case 'cyan':
-          colorClasses = 'text-[#1D4ED8] dark:text-[#60A5FA] font-black drop-shadow-[0_4px_16px_rgba(29,78,216,0.18)]';
+          colorClasses = 'text-[#38BDF8] dark:text-[#60A5FA] font-black drop-shadow-[0_4px_16px_rgba(56,189,248,0.22)]';
+          break;
+        case 'coral-amber':
+          colorClasses = 'bg-gradient-to-r from-[#F06A58] via-[#F28B47] to-[#F5B037] bg-clip-text text-transparent font-black inline-block drop-shadow-[0_4px_16px_rgba(242,139,71,0.22)]';
           break;
         case 'amber':
           colorClasses = 'text-[#D97706] dark:text-[#FBBF24] font-black drop-shadow-[0_4px_16px_rgba(217,119,6,0.18)]';
-          break;
-        case 'red':
-          colorClasses = 'text-[#E60039] font-black drop-shadow-[0_4px_16px_rgba(230,0,57,0.22)]';
           break;
         case 'violet':
           colorClasses = 'text-[#7C3AED] dark:text-[#C084FC] font-black drop-shadow-[0_4px_16px_rgba(124,58,237,0.18)]';
@@ -265,10 +269,9 @@ export const HeroOpeningCover: React.FC<HeroOpeningCoverProps> = ({ lang, onDisc
           colorClasses = 'text-[#059669] dark:text-[#34D399] font-black drop-shadow-[0_4px_16px_rgba(5,150,105,0.18)]';
           break;
         case 'white-bold':
-          colorClasses = 'text-black dark:text-white font-black';
-          break;
+        case 'black':
         default:
-          colorClasses = 'text-black dark:text-white font-black';
+          colorClasses = 'text-slate-950 dark:text-white font-black';
           break;
       }
     }
@@ -278,8 +281,8 @@ export const HeroOpeningCover: React.FC<HeroOpeningCoverProps> = ({ lang, onDisc
 
   // Expertise card animation style based on scroll
   const getExpertiseCardStyle = (cardIdx: number): React.CSSProperties => {
-    const cardStart = 0.76 + cardIdx * 0.022;
-    const cardDuration = 0.042;
+    const cardStart = 0.80 + cardIdx * 0.024;
+    const cardDuration = 0.045;
     const raw = (scrollProgress - cardStart) / cardDuration;
     const progress = Math.max(0, Math.min(1, raw));
 
@@ -300,40 +303,40 @@ export const HeroOpeningCover: React.FC<HeroOpeningCoverProps> = ({ lang, onDisc
     let pointerEvents: 'none' | 'auto' = 'none';
 
     if (sIdx === 0) {
-      // Strophe 1 : Montée en parallaxe depuis le bas après la sortie du logo
-      if (scrollProgress < 0.08) {
-        return { scale: 1.0, opacity: 0, y: 260, pointerEvents: 'none', isVisible: false };
-      } else if (scrollProgress < 0.20) {
-        const enterRatio = (scrollProgress - 0.08) / 0.12;
+      // Strophe 1 : Montée continue en recouvrement avec la sortie du logo (zéro écran blanc)
+      if (scrollProgress < 0.20) {
+        return { scale: 1.0, opacity: 0, y: 220, pointerEvents: 'none', isVisible: false };
+      } else if (scrollProgress < 0.28) {
+        const enterRatio = (scrollProgress - 0.20) / 0.08;
         const ease = 1 - Math.pow(1 - enterRatio, 2);
         scale = 1.0;
         opacity = enterRatio;
-        y = (1 - ease) * 260;
+        y = (1 - ease) * 220;
         pointerEvents = enterRatio > 0.6 ? 'auto' : 'none';
-      } else if (scrollProgress <= 0.44) {
+      } else if (scrollProgress <= 0.52) {
         scale = 1.0;
         opacity = 1.0;
         y = 0;
         pointerEvents = 'auto';
-      } else if (scrollProgress <= 0.54) {
-        const exitRatio = (scrollProgress - 0.44) / 0.10;
+      } else if (scrollProgress <= 0.60) {
+        const exitRatio = (scrollProgress - 0.52) / 0.08;
         scale = 1.0;
         opacity = Math.max(0, 1 - exitRatio);
-        y = -exitRatio * 260;
+        y = -exitRatio * 220;
         pointerEvents = 'none';
       } else {
-        return { scale: 1.0, opacity: 0, y: -260, pointerEvents: 'none', isVisible: false };
+        return { scale: 1.0, opacity: 0, y: -220, pointerEvents: 'none', isVisible: false };
       }
     } else {
-      // Strophe 2 (Finale) : Montée en parallaxe depuis le bas
-      if (scrollProgress < 0.48) {
-        return { scale: 1.0, opacity: 0, y: 260, pointerEvents: 'none', isVisible: false };
-      } else if (scrollProgress < 0.60) {
-        const enterRatio = (scrollProgress - 0.48) / 0.12;
+      // Strophe 2 (Finale) : Montée immédiate en relais de la Strophe 1
+      if (scrollProgress < 0.52) {
+        return { scale: 1.0, opacity: 0, y: 220, pointerEvents: 'none', isVisible: false };
+      } else if (scrollProgress < 0.62) {
+        const enterRatio = (scrollProgress - 0.52) / 0.10;
         const ease = 1 - Math.pow(1 - enterRatio, 2);
         scale = 1.0;
         opacity = enterRatio;
-        y = (1 - ease) * 260;
+        y = (1 - ease) * 220;
         pointerEvents = enterRatio > 0.6 ? 'auto' : 'none';
       } else {
         scale = 1.0;
@@ -351,7 +354,7 @@ export const HeroOpeningCover: React.FC<HeroOpeningCoverProps> = ({ lang, onDisc
       ref={containerRef}
       id="hero-cover"
       className="relative w-full bg-white dark:bg-[#07090E] text-slate-900 dark:text-white select-none transition-colors"
-      style={{ minHeight: '380vh' }}
+      style={{ minHeight: '480vh' }}
     >
       {/* Sticky Fullscreen Viewport on Clean White (with dark mode support) */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center items-center px-4 sm:px-8 py-0 bg-white dark:bg-[#07090E]">
@@ -395,41 +398,106 @@ export const HeroOpeningCover: React.FC<HeroOpeningCoverProps> = ({ lang, onDisc
         <main className="relative z-20 w-full h-full max-w-[98vw] 2xl:max-w-[1720px] mx-auto flex flex-col items-center justify-center px-2 sm:px-6 md:px-10 pointer-events-none">
           <div className="relative w-full h-full flex items-center justify-center overflow-visible">
             {/* ===================================================================== */}
-            {/* OPENING HERO LOGO WITH UPWARD VERTICAL PARALLAX                       */}
+            {/* OPENING HERO LOGO: WIREFRAME Z TO SOLID LOGO CONSTRUCTION ON SCROLL   */}
             {/* ===================================================================== */}
-            {scrollProgress < 0.16 && (
-              <div
-                className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none will-change-transform z-30"
-                style={{
-                  opacity: scrollProgress < 0.05 ? 1 : Math.max(0, 1 - (scrollProgress - 0.05) / 0.09),
-                  transform: `translateY(${-(scrollProgress / 0.14) * 320}px) scale(${1 - (scrollProgress / 0.14) * 0.06})`,
-                  transition: 'opacity 0.12s ease-out, transform 0.12s ease-out',
-                }}
-              >
-                <div className="relative flex flex-col items-center justify-center">
-                  {/* Radiant multi-layer glow matching the large scale */}
-                  <div className="absolute w-80 h-80 sm:w-[500px] sm:h-[500px] md:w-[620px] md:h-[620px] rounded-full bg-gradient-to-tr from-[#E60039]/20 via-red-500/10 to-transparent blur-3xl pointer-events-none" />
+            {scrollProgress < 0.34 && (() => {
+              // 1. Trail stretch: unfolds dynamically and stays fully deployed
+              const stretchFactor = Math.min(1.4, scrollProgress / 0.07);
 
-                  {/* Official Zenika Monogram SVG Emblem */}
-                  <div className="relative z-10 w-52 h-52 sm:w-68 sm:h-68 md:w-80 md:h-80 lg:w-96 lg:h-96 filter hover:scale-105 transition-transform duration-500 flex items-center justify-center">
-                    <ZenikaMonogram size="100%" glow variant="color" />
-                  </div>
+              // 2. Materialization of the True Solid Logo from the wireframe lines:
+              // At start (scroll = 0): 0.0 -> ONLY the pure wireframe contour Z is visible!
+              // From 0.008 to 0.075: the true solid logo builds itself and crystallizes from the lines
+              const solidLogoOpacity = Math.max(0, Math.min(1, (scrollProgress - 0.006) / 0.065));
 
-                  {/* Brand Name & Subtitle */}
-                  <div className="relative z-10 mt-6 sm:mt-8 flex flex-col items-center text-center">
-                    <h1
-                      style={{ fontFamily: "'Nunito', sans-serif" }}
-                      className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black font-nunito tracking-tight text-black dark:text-white lowercase drop-shadow-[0_4px_24px_rgba(230,0,57,0.18)]"
+              // 3. Accentuer l'effet d'intro plus longtemps:
+              // Les traits restent visibles beaucoup plus longtemps (de 0.015 jusqu'à 0.26)
+              const trailAppear = Math.min(1, scrollProgress / 0.02);
+              const trailDisappear = scrollProgress < 0.24 ? 1 : Math.max(0, 1 - (scrollProgress - 0.24) / 0.08);
+              const trailOpacity = trailAppear * trailDisappear;
+
+              // 4. Logo reduction from large wireframe start down to lockup scale:
+              // Starts BIG at scroll = 0 (1.38x) and smoothly reduces down to compact lockup scale (0.76x)
+              const reductionProgress = Math.min(1, scrollProgress / 0.085);
+              const reductionEase = 1 - Math.pow(1 - reductionProgress, 2.2);
+              const logoScale = 1.38 - reductionEase * 0.62; // 1.38 -> 0.76
+
+              // 5. Progressive reveal of brand name "zenika" and baseline:
+              // Slides up (0.02 -> 0.075) and stays fully locked with the monogram throughout the intro!
+              const textReveal = Math.max(0, Math.min(1, (scrollProgress - 0.02) / 0.055));
+              const textOpacity = textReveal;
+              const textY = (1 - textReveal) * 16;
+
+              // 6. Ascent and fade out (Zero white gap: stays centered until 0.20, then hands over directly to Stanza 1):
+              // Stays centered from 0.00 to 0.20
+              // Moves upward from 0.20 to 0.33
+              const upwardProgress = scrollProgress < 0.20 ? 0 : Math.min(1, (scrollProgress - 0.20) / 0.12);
+              const upwardEase = Math.pow(upwardProgress, 1.15);
+              const containerY = -upwardEase * 360;
+
+              // Fade out synchronized with Stanza 1's arrival (fades out as it exits top, from 0.23 to 0.32)
+              const fadeOutProgress = scrollProgress < 0.23 ? 0 : Math.min(1, (scrollProgress - 0.23) / 0.09);
+              const containerOpacity = Math.max(0, 1 - fadeOutProgress);
+              const containerScale = 1 - upwardProgress * 0.06;
+
+              return (
+                <div
+                  className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none will-change-transform z-30"
+                  style={{
+                    opacity: containerOpacity,
+                    transform: `translateY(${containerY}px) scale(${containerScale})`,
+                    transition: 'opacity 0.06s ease-out, transform 0.06s ease-out',
+                  }}
+                >
+                  <div className="relative flex flex-col items-center justify-center px-4">
+                    {/* Radiant multi-layer ruby glow (glows brighter as solid logo builds) */}
+                    <div
+                      className="absolute w-72 h-72 sm:w-96 sm:h-96 md:w-[440px] md:h-[440px] rounded-full bg-gradient-to-tr from-[#E60039]/20 via-red-500/10 to-transparent blur-3xl pointer-events-none transition-opacity duration-300"
+                      style={{ opacity: 0.15 + solidLogoOpacity * 0.85 }}
+                    />
+
+                    {/* Monogram with dynamic scale, wireframe start, and building solid logo */}
+                    <div
+                      className="relative z-10 w-52 h-52 sm:w-64 sm:h-64 md:w-76 md:h-76 lg:w-[350px] lg:h-[350px] xl:w-[390px] xl:h-[390px] 2xl:w-[410px] 2xl:h-[410px] max-w-[42vh] max-h-[42vh] flex items-center justify-center will-change-transform"
+                      style={{
+                        transform: `scale(${logoScale})`,
+                        transition: 'transform 0.12s ease-out',
+                      }}
                     >
-                      zenika
-                    </h1>
-                    <p className="text-sm sm:text-base md:text-lg font-mono tracking-[0.38em] uppercase text-black dark:text-white mt-2.5 sm:mt-3 font-bold">
-                      technology · consulting · craft
-                    </p>
+                      <ZenikaTrailMonogram
+                        size="100%"
+                        stretch={stretchFactor}
+                        solidLogoOpacity={solidLogoOpacity}
+                        trailOpacity={trailOpacity}
+                        layerCount={30}
+                        trajectory="downward-to-i"
+                        variant="color"
+                      />
+                    </div>
+
+                    {/* Brand Name & Subtitle: Revealed cleanly underneath as logo reduces */}
+                    <div
+                      className="relative z-10 mt-4 sm:mt-5 md:mt-6 flex flex-col items-center text-center will-change-transform"
+                      style={{
+                        opacity: textOpacity,
+                        transform: `translateY(${textY}px)`,
+                        pointerEvents: textOpacity > 0.5 ? 'auto' : 'none',
+                        transition: 'opacity 0.14s ease-out, transform 0.14s ease-out',
+                      }}
+                    >
+                      <h1
+                        style={{ fontFamily: "'Nunito', sans-serif" }}
+                        className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black font-nunito tracking-tight text-black dark:text-white lowercase drop-shadow-[0_4px_24px_rgba(230,0,57,0.18)]"
+                      >
+                        zenika
+                      </h1>
+                      <p className="text-xs sm:text-sm md:text-base lg:text-lg font-mono tracking-[0.38em] uppercase text-black dark:text-white mt-2 sm:mt-2.5 font-bold">
+                        technology · consulting · craft
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
 
             {/* ===================================================================== */}
             {/* MANIFESTO STANZAS ON SCROLL                                           */}
@@ -567,22 +635,14 @@ export const HeroOpeningCover: React.FC<HeroOpeningCoverProps> = ({ lang, onDisc
                           id="hero-expertise-card-conseil"
                           onClick={() => jumpToSection('value-stream')}
                           style={getExpertiseCardStyle(0)}
-                          className="group relative flex flex-row md:flex-col items-center md:justify-center p-3.5 sm:p-4 md:p-4.5 rounded-2xl bg-white dark:bg-[#0E1322] hover:bg-slate-50 dark:hover:bg-black/95 border border-blue-200 dark:border-[#5090F4]/30 hover:border-[#5090F4] shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 active:scale-[0.98] cursor-pointer will-change-transform gap-3.5 sm:gap-4 md:gap-0 text-left md:text-center focus:outline-none focus:ring-2 focus:ring-[#5090F4]/50"
+                          className="group relative flex flex-col items-center justify-center py-4 px-6 sm:py-5 sm:px-7 rounded-2xl bg-gradient-to-r from-[#EB6550] via-[#F28B47] to-[#F5B037] text-white shadow-lg shadow-[#F28B47]/25 hover:shadow-xl hover:shadow-[#F28B47]/35 transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.98] cursor-pointer will-change-transform text-center focus:outline-none focus:ring-2 focus:ring-[#F5B037]/50"
                         >
-                          <div className="shrink-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 md:mb-2.5">
-                            <ZenikaConseilIcon size={38} className="shadow-xs" />
-                          </div>
-                          <div className="flex flex-col text-left md:text-center min-w-0 flex-1">
-                            <h4 className="text-base sm:text-lg md:text-xl font-bold font-display text-slate-950 dark:text-white tracking-wide uppercase truncate">
-                              {lang === 'fr' ? 'Conseil' : 'Advisory'}
-                            </h4>
-                            <p className="text-xs font-mono text-blue-600 dark:text-[#5090F4] mt-0.5 uppercase tracking-wider font-semibold truncate">
-                              {lang === 'fr' ? 'Stratégie & Architecture SI' : 'IT Strategy & Architecture'}
-                            </p>
-                          </div>
-                          <div className="md:hidden shrink-0 text-slate-400 group-hover:text-slate-900 dark:text-white/35 dark:group-hover:text-white transition-colors pl-1">
-                            <ArrowRight size={17} />
-                          </div>
+                          <h4 className="text-base sm:text-lg md:text-xl font-black font-display tracking-wider text-white uppercase drop-shadow-xs">
+                            {lang === 'fr' ? 'Conseil' : 'Advisory'}
+                          </h4>
+                          <p className="text-xs sm:text-sm font-medium italic text-white/95 mt-1 tracking-normal font-sans">
+                            {lang === 'fr' ? 'Stratégie & Architecture SI' : 'IT Strategy & Architecture'}
+                          </p>
                         </button>
 
                         {/* PILIER 2: RÉALISATION */}
@@ -590,23 +650,15 @@ export const HeroOpeningCover: React.FC<HeroOpeningCoverProps> = ({ lang, onDisc
                           type="button"
                           id="hero-expertise-card-realisation"
                           onClick={() => jumpToSection('solutions')}
-                          style={{ ...getExpertiseCardStyle(1), paddingLeft: '18px' }}
-                          className="group relative flex flex-row md:flex-col items-center md:justify-center p-3.5 sm:p-4 md:p-4.5 rounded-2xl bg-white dark:bg-[#0E1322] hover:bg-slate-50 dark:hover:bg-black/95 border border-red-200 dark:border-[#E60039]/35 hover:border-[#E60039] shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 active:scale-[0.98] cursor-pointer will-change-transform gap-3.5 sm:gap-4 md:gap-0 text-left md:text-center focus:outline-none focus:ring-2 focus:ring-[#E60039]/50"
+                          style={getExpertiseCardStyle(1)}
+                          className="group relative flex flex-col items-center justify-center py-4 px-6 sm:py-5 sm:px-7 rounded-2xl bg-gradient-to-r from-[#3B82F6] via-[#4895EF] to-[#60A5FA] text-white shadow-lg shadow-[#3B82F6]/25 hover:shadow-xl hover:shadow-[#3B82F6]/35 transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.98] cursor-pointer will-change-transform text-center focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/50"
                         >
-                          <div className="shrink-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 md:mb-2.5">
-                            <ZenikaRealisationIcon size={38} className="shadow-xs" />
-                          </div>
-                          <div className="flex flex-col text-left md:text-center min-w-0 flex-1">
-                            <h4 className="text-base sm:text-lg md:text-xl font-bold font-display text-slate-950 dark:text-white tracking-wide uppercase truncate">
-                              {lang === 'fr' ? 'Réalisation' : 'Delivery'}
-                            </h4>
-                            <p className="text-xs font-mono text-[#E60039] mt-0.5 uppercase tracking-wider font-semibold truncate">
-                              {lang === 'fr' ? 'Software Craft & Cloud-Native' : 'Software Craft & Cloud-Native'}
-                            </p>
-                          </div>
-                          <div className="md:hidden shrink-0 text-slate-400 group-hover:text-slate-900 dark:text-white/35 dark:group-hover:text-white transition-colors pl-1">
-                            <ArrowRight size={17} />
-                          </div>
+                          <h4 className="text-base sm:text-lg md:text-xl font-black font-display tracking-wider text-white uppercase drop-shadow-xs">
+                            {lang === 'fr' ? 'Réalisation' : 'Delivery'}
+                          </h4>
+                          <p className="text-xs sm:text-sm font-medium italic text-white/95 mt-1 tracking-normal font-sans">
+                            {lang === 'fr' ? 'Software Craft & Cloud-Native' : 'Software Craft & Cloud-Native'}
+                          </p>
                         </button>
 
                         {/* PILIER 3: FORMATION */}
@@ -615,22 +667,14 @@ export const HeroOpeningCover: React.FC<HeroOpeningCoverProps> = ({ lang, onDisc
                           id="hero-expertise-card-formation"
                           onClick={() => jumpToSection('operating-models')}
                           style={getExpertiseCardStyle(2)}
-                          className="group relative flex flex-row md:flex-col items-center md:justify-center p-3.5 sm:p-4 md:p-4.5 rounded-2xl bg-white dark:bg-[#0E1322] hover:bg-slate-50 dark:hover:bg-black/95 border border-amber-200 dark:border-amber-500/35 hover:border-amber-500 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 active:scale-[0.98] cursor-pointer will-change-transform gap-3.5 sm:gap-4 md:gap-0 text-left md:text-center focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+                          className="group relative flex flex-col items-center justify-center py-4 px-6 sm:py-5 sm:px-7 rounded-2xl bg-gradient-to-r from-[#4B6CB7] via-[#6C63D9] to-[#9965F4] text-white shadow-lg shadow-[#7C3AED]/25 hover:shadow-xl hover:shadow-[#7C3AED]/35 transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.98] cursor-pointer will-change-transform text-center focus:outline-none focus:ring-2 focus:ring-[#9965F4]/50"
                         >
-                          <div className="shrink-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 md:mb-2.5">
-                            <ZenikaFormationIcon size={38} className="shadow-xs" />
-                          </div>
-                          <div className="flex flex-col text-left md:text-center min-w-0 flex-1">
-                            <h4 className="text-base sm:text-lg md:text-xl font-bold font-display text-slate-950 dark:text-white tracking-wide uppercase truncate">
-                              {lang === 'fr' ? 'Formation' : 'Training'}
-                            </h4>
-                            <p className="text-xs font-mono text-[#D97706] dark:text-amber-300 mt-0.5 uppercase tracking-wider font-semibold truncate">
-                              {lang === 'fr' ? 'Académie & Acculturation IA' : 'Academy & AI Upskilling'}
-                            </p>
-                          </div>
-                          <div className="md:hidden shrink-0 text-slate-400 group-hover:text-slate-900 dark:text-white/35 dark:group-hover:text-white transition-colors pl-1">
-                            <ArrowRight size={17} />
-                          </div>
+                          <h4 className="text-base sm:text-lg md:text-xl font-black font-display tracking-wider text-white uppercase drop-shadow-xs">
+                            {lang === 'fr' ? 'Formation' : 'Training'}
+                          </h4>
+                          <p className="text-xs sm:text-sm font-medium italic text-white/95 mt-1 tracking-normal font-sans">
+                            {lang === 'fr' ? 'Académie & Acculturation IA' : 'Academy & AI Upskilling'}
+                          </p>
                         </button>
                       </div>
                     )}

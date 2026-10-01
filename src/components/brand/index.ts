@@ -5,4 +5,5 @@ export * from './ZenikaExtrudedMonogram';
 export * from './ZenikaGraphicDevice';
 export * from './ZenikaLogo';
 export * from './ZenikaMonogram';
+export * from './ZenikaTrailMonogram';
 export * from './ZenikaValueIcons';
