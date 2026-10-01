@@ -6,6 +6,8 @@ export * from './HeritageSection';
 export * from './OperatingModelsSection';
 export * from './PartnersEcosystemSection';
 export * from './PortfolioShowcaseSection';
+export * from './PublicationsSection';
 export * from './StrategicAxesSection';
 export * from './TimelineFriseSection';
+export * from './ValueBridgeParallaxV2';
 export * from './ValueBridgeScrollSection';

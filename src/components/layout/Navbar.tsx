@@ -63,7 +63,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       lastScrollY.current = currentScrollY;
 
-      const sections = ['value-stream', 'why', 'portfolio', 'operating-models', 'heritage', 'solutions', 'partners', 'agencies', 'contact'];
+      const sections = ['value-stream', 'why', 'portfolio', 'operating-models', 'heritage', 'solutions', 'partners', 'agencies', 'publications', 'contact'];
 
       // Near top of page: immediately activate 'value-stream'
       if (window.scrollY < 120) {
@@ -150,6 +150,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'heritage', altIds: ['timeline', 'communications'], labelFr: '20 Ans', labelEn: '20 Years' },
     { id: 'partners', altIds: ['studios'], labelFr: 'Partenaires', labelEn: 'Partners' },
     { id: 'agencies', altIds: ['implantations'], labelFr: 'Agences', labelEn: 'Offices' },
+    { id: 'publications', altIds: ['blog', 'livres-blancs'], labelFr: 'Publications', labelEn: 'Publications' },
     { id: 'contact', altIds: [], labelFr: 'Contact', labelEn: 'Contact' },
   ];
 

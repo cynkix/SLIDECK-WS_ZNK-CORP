@@ -18,6 +18,7 @@ const PortfolioShowcaseSection = lazy(() => import('../sections/PortfolioShowcas
 const AgenciesSection = lazy(() => import('../sections/AgenciesSection').then(m => ({ default: m.AgenciesSection })));
 const PartnersEcosystemSection = lazy(() => import('../sections/PartnersEcosystemSection').then(m => ({ default: m.PartnersEcosystemSection })));
 const HeritageSection = lazy(() => import('../sections/HeritageSection').then(m => ({ default: m.HeritageSection })));
+const PublicationsSection = lazy(() => import('../sections/PublicationsSection').then(m => ({ default: m.PublicationsSection })));
 const ContactSection = lazy(() => import('../sections/ContactSection').then(m => ({ default: m.ContactSection })));
 
 interface Version1FluidProps {
@@ -355,7 +356,14 @@ export const Version1Fluid: React.FC<Version1FluidProps> = ({
       </Suspense>
 
       {/* ========================================================================= */}
-      {/* 07. SECTION CONTACT SUR LA PAGE (id="contact")                            */}
+      {/* 07. PUBLICATIONS, LIVRES BLANCS & REX TECH (id="publications")           */}
+      {/* ========================================================================= */}
+      <Suspense fallback={null}>
+        <PublicationsSection lang={lang} onOpenContact={() => onOpenContact()} />
+      </Suspense>
+
+      {/* ========================================================================= */}
+      {/* 08. SECTION CONTACT SUR LA PAGE (id="contact")                            */}
       {/* ========================================================================= */}
       <Suspense fallback={null}>
         <ContactSection lang={lang} onOpenBot={onOpenBot} />
